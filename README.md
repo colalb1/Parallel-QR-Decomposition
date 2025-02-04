@@ -18,7 +18,8 @@ Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. 
 Realistically, you probably shouldn't. 
 
 No, but for real, algorithms like this significantly speed up least-squares problems and eigenvalue computations for [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis), among other relevant applications. Basically, data scientists will waste less time ~~scrolling on TikTok~~ waiting for models to finish computing, and can iterate/improve solutions faster.
-What this means for business people who don't care about all that academic stuff is that your engineers can iterate on solutions faster and hence make money faster.
+
+What this means for business people who don't care about all that academic stuff is that your engineers can iterate on solutions faster and hence make you more money.
 
 ## TODO:
 
