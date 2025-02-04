@@ -1,6 +1,6 @@
 # Parallel-QR-Decomposition
 
-*Note to the recruiter/senior engineer who is considering hiring me and is reading this:* I write more buttoned-up (dry) documentation in a professional setting. This is **MY** project so the information will be conveyed in a tone true to myself. This certainly does **NOT** imply I will sacrifice any technical quality; there is no point in doing anything if you don't *try* to make it the best it can be. If the persona quirks of this document are a dealbreaker for you, so be it. *I* think this work is interesting, so I encourage you to read it (the technical parts, anyway) regardless.
+*Note to the recruiter/senior engineer who is considering hiring me and is reading this:* I write more buttoned-up (dry) documentation in a professional setting. This is **MY** project so the information will be conveyed in a tone true to myself. This certainly does **NOT** imply I will sacrifice any technical quality; there is no point in doing anything if you don't *try* to make it the best it can be.
 
 ## Why I am doing this project:
 
