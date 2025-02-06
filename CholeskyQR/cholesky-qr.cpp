@@ -4,22 +4,28 @@
 typedef Eigen::MatrixXd Matrix;
 
 // Function to perform Cholesky QR decomposition
-void choleskyQR(const Matrix &A, Matrix &Q, Matrix &R)
+std::pair<Matrix, Matrix> choleskyQR(const Matrix &A)
 {
-    Eigen::LLT<Matrix> llt(A.transpose() * A);
-    R = llt.matrixU();
-    Q = A * R.inverse().transpose();
+    // Compute Gram matrix
+    Eigen::LLT<Matrix> cholesky_factorization(A.transpose() * A);
+
+    // Get upper triangular Cholesky factor R
+    Matrix R = cholesky_factorization.matrixU();
+
+    // Compute Q matrix
+    Matrix Q = A * R.inverse();
+
+    return {Q, R};
 }
 
 int main()
 {
     Matrix A(3, 3);
-    A << 4, 12, -16,
-        12, 37, -43,
-        -16, -43, 98;
+    A << 12, -51, 4,
+        6, 167, -68,
+        -4, 24, -41;
 
-    Matrix Q, R;
-    choleskyQR(A, Q, R);
+    auto [Q, R] = choleskyQR(A);
 
     std::cout << "Matrix Q:" << std::endl;
     std::cout << Q << std::endl;
