@@ -23,8 +23,8 @@ What this means for business people who don't care about all that academic stuff
 
 ## TODO:
 
-1. Figure out how to run C++ programs on PC without breaking
-2. Implement simple parallel applications (for loops, other basics)
+~~1. Figure out how to run C++ programs on PC without breaking~~
+~~2. Implement simple parallel applications (for loops, other basics)~~
 3. Implement iterative Cholesky (used for speed comparison)
 4. Implement parallel Cholesky (used for speed comparison)
 5. Implement CholeskyQR2
