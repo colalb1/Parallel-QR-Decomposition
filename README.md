@@ -26,7 +26,7 @@ What this means for business people who don't care about all that academic stuff
 1. ~~Figure out how to run C++ programs on PC without breaking~~
 2. ~~Implement simple parallel applications (for loops, other basics)~~
 3. ~~Implement iterative Cholesky (used for speed comparison)~~
-3.5. Fix iterative Cholesky
+~~3.5. Fix iterative Cholesky~~
 4. Implement parallel Cholesky (used for speed comparison)
 5. Implement CholeskyQR2
 6. Implement CholeskyQR2 with Gram-Schmidt (CQR2GS)
