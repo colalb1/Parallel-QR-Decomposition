@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Eigen/Dense>
+#include <chrono>
 
 typedef Eigen::MatrixXd Matrix;
 
@@ -20,18 +21,30 @@ std::pair<Matrix, Matrix> cholesky_QR_decomposition(const Matrix &A)
 
 int main()
 {
-    Matrix A(3, 3);
-    A << 12, -51, 4,
-        6, 167, -68,
-        -4, 24, -41;
+    // Tall matrix dimensions
+    int num_rows = 100000;
+    int num_cols = 100;
+    int num_iterations = 200;
 
-    auto [Q, R] = cholesky_QR_decomposition(A);
+    // Timing for serial decomposition
+    double total_time_serial = 0.0;
+    for (int i = 0; i < num_iterations; ++i)
+    {
+        std::cout << "Iteration: " << i << " \n";
 
-    std::cout << "Matrix Q:" << std::endl;
-    std::cout << Q << std::endl;
+        // Generate a random tall matrix A
+        Matrix A = Matrix::Random(num_rows, num_cols);
 
-    std::cout << "Matrix R:" << std::endl;
-    std::cout << R << std::endl;
+        auto start = std::chrono::high_resolution_clock::now();
+        auto [Q, R] = cholesky_QR_decomposition(A);
+        auto end = std::chrono::high_resolution_clock::now();
 
-    return 0;
+        std::chrono::duration<double> elapsed = end - start;
+
+        total_time_serial += elapsed.count();
+    }
+    double average_time_serial = total_time_serial / num_iterations;
+
+    // Output results
+    std::cout << "Average time for cholesky_QR_decomposition: " << average_time_serial << " seconds\n";
 }
