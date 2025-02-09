@@ -134,11 +134,11 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR(const Matrix &A)
     double s = std::sqrt(num_rows) * u * norm_A;
 
     // Compute shifted Gram matrix
-    Matrix gram_matrix = A.transpose() * A;
-    gram_matrix.diagonal().array() += s; // Shift diagonal
+    Matrix G = A.transpose() * A;
+    G.diagonal().array() += s; // Shift diagonal
 
     // Perform Cholesky factorization
-    Eigen::LLT<Matrix> cholesky_factorization(gram_matrix);
+    Eigen::LLT<Matrix> cholesky_factorization(G);
 
     // Get upper triangular Cholesky factor R
     Matrix R = cholesky_factorization.matrixU();
