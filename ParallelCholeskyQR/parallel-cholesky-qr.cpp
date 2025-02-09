@@ -5,7 +5,8 @@
 
 typedef Eigen::MatrixXd Matrix;
 
-std::pair<Matrix, Matrix> parallel_cholesky_QR_decomposition(const Matrix &A)
+// Parallel Cholesky QR decomposition
+std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
@@ -86,7 +87,7 @@ int main()
         Matrix A = Matrix::Random(num_rows, num_cols);
 
         auto start = std::chrono::high_resolution_clock::now();
-        auto [Q, R] = parallel_cholesky_QR_decomposition(A);
+        auto [Q, R] = parallel_cholesky_QR(A);
         auto end = std::chrono::high_resolution_clock::now();
 
         std::chrono::duration<double> elapsed = end - start;

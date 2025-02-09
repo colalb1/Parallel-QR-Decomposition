@@ -5,7 +5,7 @@
 typedef Eigen::MatrixXd Matrix;
 
 // Cholesky QR decomposition
-std::pair<Matrix, Matrix> cholesky_QR_decomposition(const Matrix &A)
+std::pair<Matrix, Matrix> cholesky_QR(const Matrix &A)
 {
     // Compute Gram matrix
     Eigen::LLT<Matrix> cholesky_factorization(A.transpose() * A);
@@ -36,7 +36,7 @@ int main()
         Matrix A = Matrix::Random(num_rows, num_cols);
 
         auto start = std::chrono::high_resolution_clock::now();
-        auto [Q, R] = cholesky_QR_decomposition(A);
+        auto [Q, R] = cholesky_QR(A);
         auto end = std::chrono::high_resolution_clock::now();
 
         std::chrono::duration<double> elapsed = end - start;
