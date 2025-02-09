@@ -1,6 +1,6 @@
 #include <utils/helper_algos.hpp>
 
-// Cholesky QR decomposition
+// Cholesky QR decomposition 2
 std::pair<Matrix, Matrix> cholesky_QR_2(const Matrix &A)
 {
     // Initial Q and R extraction; this computation will be performed again
