@@ -27,10 +27,13 @@ What this means for business people who don't care about all that academic stuff
 2. ~~Implement simple parallel applications (for loops, other basics)~~
 3. ~~Implement iterative Cholesky (used for speed comparison)~~
 ~~3.5. Fix iterative Cholesky~~
-4. Implement parallel Cholesky (used for speed comparison)
+4. ~~Implement parallel Cholesky (used for speed comparison)~~
 5. Implement CholeskyQR2
 6. Implement CholeskyQR2 with Gram-Schmidt (CQR2GS)
 7. Implement sCQR3
 8. Implement TSQR
 9. Implement Householder (used for speed comparison)
 10. Implement parallel Householder
+
+Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
+Average time for `parallel_cholesky_QR_decomposition`: 0.909875 seconds.
