@@ -38,3 +38,5 @@ What this means for business people who don't care about all that academic stuff
 Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
 
 Average time for `parallel_cholesky_QR_decomposition`: 0.909875 seconds.
+
+Gee, that's quick!!
