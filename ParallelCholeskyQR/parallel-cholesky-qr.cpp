@@ -35,16 +35,15 @@ std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
         // Compute A_i^T * A_i for the sliced submatrix
         local_W[thread_id].noalias() += A_i.transpose() * A_i;
 
+        // Use a critical section to safely update the global Gram matrix W
+    #pragma omp critical
+        {
+            W += local_W[thread_id];
+        }
+
         // Compute Q slice directly; I will multiply by R inverse later
         // This reduces storage by not storing A_i slices
         Q.middleRows(start, end - start) = A_i;
-    }
-
-    // Sum local Gram matrices
-    // #pragma omp parallel for reduction(+ : W)
-    for (int i = 0; i < num_threads; ++i)
-    {
-        W += local_W[i];
     }
 
     // Cholesky factorization of Gram matrix
