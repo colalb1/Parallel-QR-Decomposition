@@ -11,10 +11,12 @@ typedef Eigen::MatrixXd Matrix;
 
 // Compute unit roundoff for given floating-point type
 template <typename T>
-T compute_unit_roundoff() {
+T compute_unit_roundoff()
+{
     T u = 1.0;
 
-    while (1.0 + u != 1.0) {
+    while (1.0 + u != 1.0)
+    {
         u /= 2.0;
     }
 
@@ -67,7 +69,7 @@ std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
         local_W[thread_id].noalias() += A_i.transpose() * A_i;
 
         // Use a critical section to safely update the global Gram matrix W
-    #pragma omp critical
+#pragma omp critical
         {
             W += local_W[thread_id];
         }
@@ -185,7 +187,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
         local_W[thread_id].noalias() += A_i.transpose() * A_i;
 
         // Use a critical section to safely update the global Gram matrix W
-    #pragma omp critical
+#pragma omp critical
         {
             W += local_W[thread_id];
         }
