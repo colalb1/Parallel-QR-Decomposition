@@ -7,15 +7,13 @@ I want to learn more about parallelizing programs for high-performance numerical
 ## What this project is:
 
 Writing parallel QR decomposition algorithms. Part of this will be implementing the GPU-limited algorithms from [this repo](https://github.com/HybridScale/CholeskyQR2-IM) and continuing to other algorithms (like TLQR or Householder (want stable parallel option)) after I get my bearings.
-I will probably rewrite the algorithm they have written for a CPU for sanity purposes (reading other people's code is a hellish experience).
+I will probably rewrite the algorithm they have written for a CPU for sanity purposes.
 
 Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. Now you may continue reading.
 
 ## Why you should care:
 
-Realistically, you probably shouldn't. 
-
-No, but for real, algorithms like this significantly speed up least-squares problems and eigenvalue computations for [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis), among other relevant applications. Basically, data scientists will waste less time ~~scrolling on TikTok~~ waiting for models to finish computing, and can iterate/improve solutions faster.
+Algorithms like this significantly speed up least-squares problems and eigenvalue computations for [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis), among other relevant applications. Basically, data scientists will waste less time waiting for models to finish computing and can iterate/improve solutions faster.
 
 What this means for business people who don't care about all that academic stuff is that your engineers can iterate on solutions faster and make you more money.
 
@@ -43,7 +41,3 @@ Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
 Average time for `parallel_cholesky_QR_decomposition`: 0.909875 seconds.
 
 Gee, that's quick!!
-
-### Final Note
-
-*Note to the recruiter/senior engineer who is considering hiring me and is reading this:* I write more buttoned-up (dry) documentation in a professional setting. This is **MY** project so the information will be conveyed in a tone true to myself. This certainly does **NOT** imply I will sacrifice any technical quality; there is no point in doing anything if you don't *try* to make it the best it can be.
