@@ -26,12 +26,17 @@ What this means for business people who don't care about all that academic stuff
 3. ~~Implement iterative Cholesky (used for speed comparison)~~
 ~~3.5. Fix iterative Cholesky~~
 4. ~~Implement parallel Cholesky (used for speed comparison)~~
-5. Implement CholeskyQR2
-6. Implement CholeskyQR2 with Gram-Schmidt (CQR2GS)
-7. Implement sCQR3
-8. Implement TSQR
-9. Implement Householder (used for speed comparison)
-10. Implement parallel Householder
+5. ~~Implement CholeskyQR2~~
+6. ~~Implement sCQR3~~
+7. Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)
+8. Implement Distributed Cholesky QR with blocked GS (dCQRbGS)
+9. Implement Modified Cholesky QRwGS
+10. Implement mCQR2GS
+11. Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
+12. Speed test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
+13. Implement TSQR
+14. Implement Householder (used for speed comparison)
+15. Implement parallel Householder
 
 Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
 
