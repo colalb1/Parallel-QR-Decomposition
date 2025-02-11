@@ -14,3 +14,29 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR_3(const Matrix &A)
 
     return {Q, R};
 }
+
+int main()
+{
+    // Tall matrix dimensions
+    int num_rows = 100000;
+    int num_cols = 100;
+
+    // Timing
+    double total_time = 0.0;
+
+    // Generate a random tall matrix A
+    Matrix A = Matrix::Random(num_rows, num_cols);
+
+    auto start = std::chrono::high_resolution_clock::now();
+    auto [Q, R] = shifted_cholesky_QR_3(A);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    std::chrono::duration<double> elapsed = end - start;
+
+    total_time += elapsed.count();
+
+    // Output results
+    std::cout << "Time for shifted_cholesky_QR_3: " << total_time << " seconds\n";
+
+    return 0;
+}
