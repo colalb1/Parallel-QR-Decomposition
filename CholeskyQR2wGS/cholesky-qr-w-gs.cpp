@@ -4,16 +4,16 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
 {
     int const m = A.rows();
     int const n = A.cols();
-    int const b = std::min(64, n); // Adjust block size dynamically
+    int const block_size = std::min(64, n); // Adjust block size dynamically
 
     Matrix Q(m, n);
     Matrix R(n, n);
 
-    for (int j = 0; j < n; j += b)
+    for (int j = 0; j < n; j += block_size)
     {
         // Adjusts block size for last iteration
-        int const current_b = std::min(b, n - j);
-        Matrix A_j = A.block(0, j, m, current_b);
+        int const current_block_size = std::min(block_size, n - j);
+        Matrix A_j = A.block(0, j, m, current_block_size);
 
         // Cholesky factorization on Gram matrix with no explicit inversion (W_j)
         Eigen::LLT<Matrix> cholesky_decomposition(A_j.transpose() * A_j);
@@ -23,47 +23,45 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
         Matrix Q_j = A_j * U.inverse();
 
         // Update Q and R
-        Q.block(0, j, m, current_b) = Q_j;
-        R.block(j, j, current_b, current_b) = U;
+        Q.block(0, j, m, current_block_size) = Q_j;
+        R.block(j, j, current_block_size, current_block_size) = U;
 
         // Update trailing panels
-        if (j + current_b < n)
+        if (j + current_block_size < n)
         {
-            Matrix A_next = A.block(0, j + current_b, m, n - (j + current_b));
+            int const start_block_index = j + current_block_size;
+            int const end_block_index = n - (j + current_block_size);
+
+            Matrix A_next = A.block(0, start_block_index, m, end_block_index);
             Matrix Y = Q_j.transpose() * A_next;
 
             // A and R panel update
             A_next.noalias() -= Q_j * Y;
-            A.block(0, j + current_b, m, n - (j + current_b)) = A_next;
-            R.block(j, j + current_b, current_b, n - (j + current_b)) = Y;
+            A.block(0, start_block_index, m, end_block_index) = A_next;
+            R.block(j, start_block_index, current_block_size, end_block_index) = Y;
         }
     }
 
     return {Q, R};
 }
 
-// int main()
-// {
-//     int m = 100000; // Tall matrix
-//     int n = 100;    // Skinny matrix
+int main()
+{
+    int m = 1000000; // Tall matrix
+    int n = 100;     // Skinny matrix
 
-//     Matrix A = Matrix::Random(m, n);
+    Matrix A = Matrix::Random(m, n);
 
-//     auto start = std::chrono::high_resolution_clock::now();
-//     auto [Q, R] = cholesky_QR_w_gram_schmidt(A);
-//     auto end = std::chrono::high_resolution_clock::now();
+    auto start = std::chrono::high_resolution_clock::now();
+    auto [Q, R] = cholesky_QR_w_gram_schmidt(A);
+    auto end = std::chrono::high_resolution_clock::now();
 
-//     // Verification (optional)
-//     Matrix A_reconstructed = Q * R;
-//     std::cout << "Max reconstruction error: "
-//               << (A_reconstructed - A).cwiseAbs().maxCoeff() << "\n";
+    std::chrono::duration<double> total_time = end - start;
 
-//     std::chrono::duration<double> total_time = end - start;
+    // Output results
+    std::cout << "Time for cholesky_QR_w_gram_schmidt: " << total_time.count() << " seconds\n";
 
-//     // Output results
-//     std::cout << "Time for cholesky_QR_w_gram_schmidt: " << total_time.count() << " seconds\n";
+    return 0;
 
-//     return 0;
-
-//     return 0;
-// }
+    return 0;
+}
