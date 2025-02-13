@@ -26,7 +26,7 @@ What this means for business people who don't care about all that academic stuff
 4. ~~Implement parallel Cholesky (used for speed comparison)~~
 5. ~~Implement CholeskyQR2~~
 6. ~~Implement sCQR3~~
-7. Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)
+7. ~~Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)~~
 8. Implement Distributed Cholesky QR with blocked GS (dCQRbGS)
 9. Implement Modified Cholesky QRwGS
 10. Implement mCQR2GS
