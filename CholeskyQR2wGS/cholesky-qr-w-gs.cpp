@@ -45,23 +45,23 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
     return {Q, R};
 }
 
-int main()
-{
-    int m = 1000000; // Tall matrix
-    int n = 100;     // Skinny matrix
+// int main()
+// {
+//     int m = 1000000; // Tall matrix
+//     int n = 100;     // Skinny matrix
 
-    Matrix A = Matrix::Random(m, n);
+//     Matrix A = Matrix::Random(m, n);
 
-    auto start = std::chrono::high_resolution_clock::now();
-    auto [Q, R] = cholesky_QR_w_gram_schmidt(A);
-    auto end = std::chrono::high_resolution_clock::now();
+//     auto start = std::chrono::high_resolution_clock::now();
+//     auto [Q, R] = cholesky_QR_w_gram_schmidt(A);
+//     auto end = std::chrono::high_resolution_clock::now();
 
-    std::chrono::duration<double> total_time = end - start;
+//     std::chrono::duration<double> total_time = end - start;
 
-    // Output results
-    std::cout << "Time for cholesky_QR_w_gram_schmidt: " << total_time.count() << " seconds\n";
+//     // Output results
+//     std::cout << "Time for cholesky_QR_w_gram_schmidt: " << total_time.count() << " seconds\n";
 
-    return 0;
+//     return 0;
 
-    return 0;
-}
+//     return 0;
+// }
