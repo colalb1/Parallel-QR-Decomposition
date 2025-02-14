@@ -62,6 +62,7 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A, int 
         {
             int next_panel_col = (j + 1) * block_size;
             int trailing_cols = n - next_panel_col;
+
             Matrix Y = Matrix::Zero(current_block_size, trailing_cols);
             std::vector<Matrix> local_Y(num_threads, Matrix::Zero(current_block_size, trailing_cols));
 
@@ -69,6 +70,7 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A, int 
             {
                 int thread_id = omp_get_thread_num();
                 int chunk_size = m / num_threads;
+
                 int start = thread_id * chunk_size;
                 int end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
@@ -87,6 +89,7 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A, int 
             {
                 int thread_id = omp_get_thread_num();
                 int chunk_size = m / num_threads;
+
                 int start = thread_id * chunk_size;
                 int end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
@@ -100,7 +103,6 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A, int 
             R.block(current_panel_col, next_panel_col, current_block_size, trailing_cols) = Y;
         }
 
-        // Store U in R
         R.block(current_panel_col, current_panel_col, current_block_size, current_block_size) = U;
     }
 
