@@ -35,6 +35,9 @@ What this means for business people who don't care about all that academic stuff
 13. Implement TSQR
 14. Implement Householder (used for speed comparison)
 15. Implement parallel Householder
+16. Delete dead code/comments
+17. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+18. Use `const` and proper C++ objects for clarity and speed
 
 Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
 
