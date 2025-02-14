@@ -27,7 +27,7 @@ What this means for business people who don't care about all that academic stuff
 5. ~~Implement CholeskyQR2~~
 6. ~~Implement sCQR3~~
 7. ~~Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)~~
-8. Implement Distributed Cholesky QR with blocked GS (dCQRbGS)
+8. ~~Implement Distributed Cholesky QR with blocked GS (dCQRbGS)~~
 9. Implement Modified Cholesky QRwGS
 10. Implement mCQR2GS
 11. Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
