@@ -23,7 +23,7 @@ T compute_unit_roundoff()
     return u;
 }
 
-// Cholesky QR decomposition
+// CQR
 std::pair<Matrix, Matrix> cholesky_QR(const Matrix &A)
 {
     // Compute Gram matrix
@@ -38,7 +38,7 @@ std::pair<Matrix, Matrix> cholesky_QR(const Matrix &A)
     return {Q, R};
 }
 
-// Parallel Cholesky QR decomposition
+// Parallel CQR
 std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
 {
     int num_rows = A.rows();
@@ -102,7 +102,7 @@ std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
     return {Q, R};
 }
 
-// Cholesky QR decomposition 2
+// CQR2
 std::pair<Matrix, Matrix> cholesky_QR_2(const Matrix &A)
 {
     // Initial Q and R extraction; this computation will be performed again
@@ -118,7 +118,7 @@ std::pair<Matrix, Matrix> cholesky_QR_2(const Matrix &A)
     return {Q, R};
 }
 
-// Shifted Cholesky QR
+// sCQR
 std::pair<Matrix, Matrix> shifted_cholesky_QR(const Matrix &A)
 {
     // Number of cols for shift application
@@ -150,7 +150,7 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR(const Matrix &A)
     return {Q, R};
 }
 
-// Parallel Shifted Cholesky QR decomposition
+// Parallel sCQR
 std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
 {
     int num_rows = A.rows();
@@ -226,7 +226,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
     return {Q, R};
 }
 
-// Shifted Cholesky QR decomposition 3
+// sCQR3
 std::pair<Matrix, Matrix> shifted_cholesky_QR_3(const Matrix &A)
 {
     // Initial shifted extraction (shift for stability)
@@ -241,7 +241,7 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR_3(const Matrix &A)
     return {Q, R};
 }
 
-// Cholesky QR decomposition with Gram-Schmidt
+// CQRGS
 std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const to allow in-place modification
 {
     int const m = A.rows();
@@ -272,7 +272,7 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
         if (j + current_block_size < n)
         {
             int const start_block_index = j + current_block_size;
-            int const end_block_index = n - (j + current_block_size);
+            int const end_block_index = n - start_block_index;
 
             Matrix A_next = A.block(0, start_block_index, m, end_block_index);
             Matrix Y = Q_j.transpose() * A_next;
@@ -302,6 +302,7 @@ std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A)
     return {Q, R};
 }
 
+// dCQRGS
 std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
 {
     int const m = A.rows();
