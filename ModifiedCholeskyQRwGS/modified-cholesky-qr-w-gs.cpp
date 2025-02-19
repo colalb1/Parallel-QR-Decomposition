@@ -17,6 +17,7 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
     Q.block(0, 0, m, block_size) = Q_1;
     R.block(0, 0, block_size, block_size) = R_11;
 
+    // FIXME: Should j < k + 1? Are the loops in the pseudocode 1-indexed?
     for (int j = 1; j < k; ++j)
     {
         int const previous_panel_col = (j - 1) * block_size;
@@ -36,19 +37,18 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
         R.block(previous_panel_col, current_panel_col, previous_block_size, trailing_cols) = Y;
 
         // Process current panel j (after trailing update)
-        Matrix current_A = A.block(0, current_panel_col, m, current_block_size);
-        // auto [Qj_temp, R_temp] = parallel_cholesky_QR(current_A);
+        Matrix A_j = A.block(0, current_panel_col, m, current_block_size);
+        auto [Q_j, R_jj] = parallel_cholesky_QR(A_j);
 
-        // // Reorthogonalize current panel with respect to Q_prev
-        // Matrix proj = Q_prev.transpose() * Qj_temp;
-        // Qj_temp -= Q_prev * proj;
+        // Reorthogonalize current panel with respect to Q_prev
+        Matrix Q_previous = Q.block(0, 0, m, current_panel_col); // To current_panel_col because the 1:(j - 1) panels implies stopping at the index of the j^th panel
+        Matrix proj = Q_previous.transpose() * Q_previous;
+        A_j -= proj * A_j;
+        A.block(0, current_panel_col, m, current_block_size) = A_j;
 
-        // // Perform CQR again on reorthogonalized panel
-        // auto [Q_j, R_jj] = parallel_cholesky_QR(Qj_temp);
-
-        // // Update Q and R
-        // Q.block(0, current_panel_start, m, s) = Q_j;
-        // R.block(current_panel_start, current_panel_start, s, s) = R_jj;
+        // Fully orthogonalize current panel
+        Q.block(0, current_panel_col, m, current_block_size) = Q_j;
+        R.block(current_panel_col, current_panel_col, current_block_size, current_block_size) = R_jj;
     }
 
     return {Q, R};
