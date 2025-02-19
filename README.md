@@ -28,7 +28,7 @@ What this means for business people who don't care about all that academic stuff
 7. ~~Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)~~
 8. ~~Implement Distributed Cholesky QR with blocked GS (dCQRbGS)~~
 9. ~~Implement Modified Cholesky QRwGS~~
-10. Implement mCQR2GS
+10. Implement mCQR2GS (check indexing THEN parallelize projections of orthogonal panels)
 11. Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
 12. Speed test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
 13. Implement TSQR
