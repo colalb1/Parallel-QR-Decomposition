@@ -18,7 +18,8 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
     R.block(0, 0, block_size, block_size) = R_11;
 
     // FIXME: Should j < k + 1? Are the loops in the pseudocode 1-indexed?
-    for (int j = 1; j < k; ++j)
+    // The loops are 1-indexed. Just going to test and see if it breaks.
+    for (int j = 1; j < k + 1; ++j)
     {
         int const previous_panel_col = (j - 1) * block_size;
         int const previous_block_size = std::min(block_size, n - previous_panel_col);
@@ -29,11 +30,20 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
 
         Matrix Q_jm1 = Q.block(0, previous_panel_col, m, previous_block_size);
 
-        // Projections of orthogonal panels
-        Matrix Y = Q_jm1.transpose() * A.block(0, current_panel_col, m, trailing_cols);
+        // Parallelize Y computation
+        Matrix Y = Matrix::Zero(previous_block_size, trailing_cols);
+#pragma omp parallel for num_threads(num_threads)
+        for (int col = 0; col < trailing_cols; ++col)
+        {
+            Y.col(col) = Q_jm1.transpose() * A.block(0, current_panel_col + col, m, 1);
+        }
 
-        // Update trailing panels
-        A.block(0, current_panel_col, m, trailing_cols) -= Q_jm1 * Y;
+// Update trailing panels
+#pragma omp parallel for num_threads(num_threads)
+        for (int col = 0; col < trailing_cols; ++col)
+        {
+            A.block(0, current_panel_col + col, m, 1) -= Q_jm1 * Y.col(col);
+        }
         R.block(previous_panel_col, current_panel_col, previous_block_size, trailing_cols) = Y;
 
         // Process current panel j (after trailing update)
@@ -42,8 +52,15 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
 
         // Reorthogonalize current panel with respect to Q_prev
         Matrix Q_previous = Q.block(0, 0, m, current_panel_col); // To current_panel_col because the 1:(j - 1) panels implies stopping at the index of the j^th panel
-        Matrix proj = Q_previous.transpose() * Q_previous;
-        A_j -= proj * A_j;
+        // Matrix proj = Q_previous.transpose() * Q_previous;
+        Matrix proj = Matrix::Zero(current_panel_col, current_block_size);
+#pragma omp parallel for num_threads(num_threads)
+        for (int col = 0; col < current_block_size; ++col)
+        {
+            proj.col(col) = Q_previous.transpose() * A_j.col(col);
+            A_j.col(col) -= Q_previous * proj.col(col);
+        }
+        // A_j -= proj * A_j;
         A.block(0, current_panel_col, m, current_block_size) = A_j;
 
         // Fully orthogonalize current panel
@@ -52,4 +69,29 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
     }
 
     return {Q, R};
+}
+
+int main()
+{
+    int m = 50000;
+    int n = 500;
+    Matrix A = Matrix::Random(m, n);
+
+    auto [Q, R] = modified_cholesky_QR2_w_gram_schmidt(A);
+
+    // Check reconstruction accuracy
+    Matrix A_reconstructed = Q * R;
+    double error = (A - A_reconstructed).norm() / A.norm();
+    std::cout << "Relative reconstruction error: " << error << "\n";
+
+    // Check orthogonality of Q
+    Matrix I = Matrix::Identity(n, n);
+    double ortho_error = (Q.transpose() * Q - I).norm();
+    std::cout << "Orthogonality error: " << ortho_error << "\n";
+
+    // Check upper triangular structure of R
+    double lower_triangular_error = R.triangularView<StrictlyLower>().norm();
+    std::cout << "Lower triangular error of R: " << lower_triangular_error << "\n";
+
+    return 0;
 }
