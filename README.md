@@ -7,7 +7,6 @@ I want to learn more about parallelizing programs for high-performance numerical
 ## What this project is:
 
 Writing parallel QR decomposition algorithms. Part of this will be implementing the GPU-limited algorithms from [this repo](https://github.com/HybridScale/CholeskyQR2-IM) and continuing to other algorithms (like TLQR or Householder (want stable parallel option)) after I get my bearings.
-I will probably rewrite the algorithm they have written for a CPU for sanity purposes.
 
 Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. Now you may continue reading.
 
@@ -28,7 +27,7 @@ What this means for business people who don't care about all that academic stuff
 7. ~~Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)~~
 8. ~~Implement Distributed Cholesky QR with blocked GS (dCQRbGS)~~
 9. ~~Implement Modified Cholesky QRwGS~~
-10. Implement mCQR2GS (check indexing THEN parallelize projections of orthogonal panels)
+10. Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)
 11. Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
 12. Speed test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
 13. Implement TSQR
