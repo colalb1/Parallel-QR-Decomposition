@@ -24,7 +24,7 @@ T compute_unit_roundoff()
 }
 
 // CQR
-std::pair<Matrix, Matrix> cholesky_QR(const Matrix &A)
+std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
 {
     // Compute Gram matrix
     Eigen::LLT<Matrix> cholesky_factorization(A.transpose() * A);
@@ -39,7 +39,7 @@ std::pair<Matrix, Matrix> cholesky_QR(const Matrix &A)
 }
 
 // Parallel CQR
-std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
+std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
@@ -103,7 +103,7 @@ std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
 }
 
 // CQR2
-std::pair<Matrix, Matrix> cholesky_QR_2(const Matrix &A)
+std::pair<Matrix, Matrix> cholesky_QR_2(Matrix &A)
 {
     // Initial Q and R extraction; this computation will be performed again
     // to increase numerical accuracy.
@@ -119,7 +119,7 @@ std::pair<Matrix, Matrix> cholesky_QR_2(const Matrix &A)
 }
 
 // sCQR
-std::pair<Matrix, Matrix> shifted_cholesky_QR(const Matrix &A)
+std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
 {
     // Number of cols for shift application
     int const num_rows = A.rows();
@@ -151,7 +151,7 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR(const Matrix &A)
 }
 
 // Parallel sCQR
-std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
+std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
@@ -227,7 +227,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
 }
 
 // sCQR3
-std::pair<Matrix, Matrix> shifted_cholesky_QR_3(const Matrix &A)
+std::pair<Matrix, Matrix> shifted_cholesky_QR_3(Matrix &A)
 {
     // Initial shifted extraction (shift for stability)
     auto [Q_1, R_1] = parallel_shifted_cholesky_QR(A);
