@@ -36,7 +36,7 @@ std::pair<Matrix, Matrix> parallel_cholesky_QR(const Matrix &A)
         local_W[thread_id].noalias() += A_i.transpose() * A_i;
 
         // Use a critical section to safely update the global Gram matrix W
-    #pragma omp critical
+#pragma omp critical
         {
             W += local_W[thread_id];
         }
@@ -74,7 +74,7 @@ int main()
     // Tall matrix dimensions
     int num_rows = 100000;
     int num_cols = 100;
-    int num_iterations = 200;
+    int num_iterations = 10;
 
     // Timing for parallel decomposition
     double total_time_parallel = 0.0;
