@@ -27,15 +27,18 @@ What this means for business people who don't care about all that academic stuff
 7. ~~Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)~~
 8. ~~Implement Distributed Cholesky QR with blocked GS (dCQRbGS)~~
 9. ~~Implement Modified Cholesky QRwGS~~
-10. Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)
+10. ~~Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)~~
 11. Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
 12. Speed test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
-13. Implement TSQR
-14. Implement Householder (used for speed comparison)
-15. Implement parallel Householder
-16. Delete dead code/comments
-17. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
-18. Use `const` and proper C++ objects for clarity and speed
+13. Delete dead code/comments
+14. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+15. Use `const` and proper C++ objects for clarity and speed
+16. Implement TSQR
+17. Implement Householder (used for speed comparison)
+18. Implement parallel Householder
+19. Delete dead code/comments
+20. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+21. Use `const` and proper C++ objects for clarity and speed
 
 Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
 
