@@ -427,7 +427,8 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
     Matrix R = Matrix::Zero(n, n);
 
     // Orthogonalize first panel
-    auto [Q_1, R_11] = cholesky_QR_2(A.block(0, 0, m, block_size));
+    Matrix A_block = A.block(0, 0, m, block_size);
+    auto [Q_1, R_11] = cholesky_QR_2(A_block);
 
     Q.block(0, 0, m, block_size) = Q_1;
     R.block(0, 0, block_size, block_size) = R_11;
