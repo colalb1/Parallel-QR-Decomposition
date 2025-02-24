@@ -28,20 +28,14 @@ What this means for business people who don't care about all that academic stuff
 8. ~~Implement Distributed Cholesky QR with blocked GS (dCQRbGS)~~
 9. ~~Implement Modified Cholesky QRwGS~~
 10. ~~Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)~~
-11. Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
-12. Speed test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
-13. Delete dead code/comments
-14. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
-15. Use `const` and proper C++ objects for clarity and speed
-16. Implement TSQR
-17. Implement Householder (used for speed comparison)
-18. Implement parallel Householder
-19. Delete dead code/comments
-20. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
-21. Use `const` and proper C++ objects for clarity and speed
-
-Average time for `cholesky_QR_decomposition`: 7.65933 seconds.
-
-Average time for `parallel_cholesky_QR_decomposition`: 0.909875 seconds.
-
-Gee, that's quick!!
+11. ~~Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRGS, mCQR2GS~~
+12. Fix ~~CQRGS~~, dCQRGS, mCQR2GS
+13. Speed test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRbGS, mCQR2GS
+14. Delete dead code/comments
+15. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+16. Use `const` and proper C++ objects for clarity and speed
+17. Delete dead code/comments
+18. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+19. Use `const` and proper C++ objects for clarity and speed
+20. Official speed and accuracy tests (ones where you can make graphs)
+21. Write description
