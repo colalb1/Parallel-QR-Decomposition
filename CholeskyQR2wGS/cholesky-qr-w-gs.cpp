@@ -26,42 +26,22 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
         Q.block(0, j, m, current_block_size) = Q_j;
         R.block(j, j, current_block_size, current_block_size) = U;
 
-        // Update trailing panels
-        if (j + current_block_size < n)
-        {
-            int const start_block_index = j + current_block_size;
-            int const end_block_index = n - (j + current_block_size);
+        int const start_block_index = j + current_block_size;
 
-            Matrix A_next = A.block(0, start_block_index, m, end_block_index);
+        // Update trailing panels
+        if (start_block_index < n)
+        {
+            int const end_block_size = n - start_block_index;
+
+            Matrix A_next = A.block(0, start_block_index, m, end_block_size);
             Matrix Y = Q_j.transpose() * A_next;
 
             // A and R panel update
             A_next.noalias() -= Q_j * Y;
-            A.block(0, start_block_index, m, end_block_index) = A_next;
-            R.block(j, start_block_index, current_block_size, end_block_index) = Y;
+            A.block(0, start_block_index, m, end_block_size) = A_next;
+            R.block(j, start_block_index, current_block_size, end_block_size) = Y;
         }
     }
 
     return {Q, R};
 }
-
-// int main()
-// {
-//     int m = 1000000; // Tall matrix
-//     int n = 100;     // Skinny matrix
-
-//     Matrix A = Matrix::Random(m, n);
-
-//     auto start = std::chrono::high_resolution_clock::now();
-//     auto [Q, R] = cholesky_QR_w_gram_schmidt(A);
-//     auto end = std::chrono::high_resolution_clock::now();
-
-//     std::chrono::duration<double> total_time = end - start;
-
-//     // Output results
-//     std::cout << "Time for cholesky_QR_w_gram_schmidt: " << total_time.count() << " seconds\n";
-
-//     return 0;
-
-//     return 0;
-// }
