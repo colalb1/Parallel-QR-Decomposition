@@ -1,7 +1,7 @@
 #include <utils/helper_algos.hpp>
 
 // Parallel Shifted Cholesky QR decomposition
-std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
+std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
@@ -37,7 +37,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
         local_W[thread_id].noalias() += A_i.transpose() * A_i;
 
         // Use a critical section to safely update the global Gram matrix W
-    #pragma omp critical
+#pragma omp critical
         {
             W += local_W[thread_id];
         }
@@ -48,7 +48,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(const Matrix &A)
     }
 
     // Stability shift
-    double s = std::sqrt(num_rows) * u * norm_A;
+    double const s = 11 * num_cols * (num_rows + num_cols + 1) * std::sqrt(num_rows) * u * std::pow(norm_A, 2);
 
     // Apply shift to the diagonal of the Gram matrix
     W.diagonal().array() += s;
