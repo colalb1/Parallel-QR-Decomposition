@@ -132,7 +132,8 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
     double const norm_A = A.norm();
 
     // Stability shift
-    double s = std::sqrt(num_rows) * u * norm_A;
+    // From this link: https://arxiv.org/abs/1809.11085
+    double const s = 11 * num_cols * (num_rows + num_cols + 1) * std::sqrt(num_rows) * u * std::pow(norm_A, 2);
 
     // Compute shifted Gram matrix
     Matrix G = A.transpose() * A;
@@ -198,7 +199,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
     }
 
     // Stability shift
-    double s = std::sqrt(num_rows) * u * norm_A;
+    double const s = 11 * num_cols * (num_rows + num_cols + 1) * std::sqrt(num_rows) * u * std::pow(norm_A, 2);
 
     // Apply shift to the diagonal of the Gram matrix
     W.diagonal().array() += s;
@@ -268,19 +269,20 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
         Q.block(0, j, m, current_block_size) = Q_j;
         R.block(j, j, current_block_size, current_block_size) = U;
 
-        // Update trailing panels
-        if (j + current_block_size < n)
-        {
-            int const start_block_index = j + current_block_size;
-            int const end_block_index = n - start_block_index;
+        int const start_block_index = j + current_block_size;
 
-            Matrix A_next = A.block(0, start_block_index, m, end_block_index);
+        // Update trailing panels
+        if (start_block_index < n)
+        {
+            int const end_block_size = n - start_block_index;
+
+            Matrix A_next = A.block(0, start_block_index, m, end_block_size);
             Matrix Y = Q_j.transpose() * A_next;
 
             // A and R panel update
             A_next.noalias() -= Q_j * Y;
-            A.block(0, start_block_index, m, end_block_index) = A_next;
-            R.block(j, start_block_index, current_block_size, end_block_index) = Y;
+            A.block(0, start_block_index, m, end_block_size) = A_next;
+            R.block(j, start_block_index, current_block_size, end_block_size) = Y;
         }
     }
 
