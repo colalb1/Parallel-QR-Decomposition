@@ -29,16 +29,26 @@ What this means for business people who don't care about all that academic stuff
 9. ~~Implement Modified Cholesky QRwGS~~
 10. ~~Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)~~
 11. ~~Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRGS, mCQR2GS~~
-12. Fix ~~CQRGS~~, dCQRGS, mCQR2GS
+12. Fix ~~CQRGS~~, ~~dCQRGS~~, mCQR2GS
 13. Speed test: CQR2GS, dCQRbGS, mCQR2GS
 14. Speed refactor
+
     a. Goal is to make these significantly faster than CQR while preserving orthogonal stability gains
+
     b. Faster than LAPACK, Intel MKL, Eigen, Armadillo
+
     c. Flame graph to find overhead
+
     d. Write out algo in ONE function to find computation reductions
+
     e. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+    
     f. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
+    
     g. Mathematical manipulations/simplifications
+
+    h. After editing in helper, insert updated functions back into original file(s).
+
 16. ~~Delete dead code/comments~~
 17. Official speed and accuracy tests (ones where you can make graphs)
 18. Write description
