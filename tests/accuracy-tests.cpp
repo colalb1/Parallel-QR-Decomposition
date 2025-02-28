@@ -12,6 +12,13 @@ std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A);
 std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A);
 std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A);
 
+// SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
+// SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
+// SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
+// SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
+// SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
+// SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
+
 // Test function for QR decomposition
 void test_qr_decomposition(const std::function<std::pair<Matrix, Matrix>(Matrix &)> &qr_func, Matrix &A, const std::string &funcName)
 {
