@@ -2,6 +2,7 @@
 #include <Eigen/Dense>
 #include <omp.h>
 #include <chrono>
+#include <fstream>
 
 // NOTE TO READER:
 // This is a helper file to make implementation of algorithms that rely on
