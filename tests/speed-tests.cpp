@@ -22,14 +22,14 @@ double measure_computation_time(std::function<std::pair<Matrix, Matrix>(Matrix &
 int main()
 {
     const std::vector<std::pair<int, int>> matrix_sizes = {
-        {30'000, 3'000},
-        {120'000, 1'200},
-        {120'000, 6'000},
-        {120'000, 12'000},
-        {40'000, 3000},
-        {80'000, 3000},
-        {120'000, 3000},
-        {480'000, 3000}};
+        {3'000, 300},
+        {12'000, 120},
+        {12'000, 600},
+        {12'000, 1'200},
+        {4'000, 300},
+        {8'000, 300},
+        {12'000, 300},
+        {48'000, 300}};
 
     const int number_of_tests_per_size = 10;
 
@@ -42,25 +42,26 @@ int main()
     {
         Matrix A = Matrix::Random(m, n);
 
-        std::vector<std::function<std::pair<Matrix, Matrix>(Matrix &)>> qr_functions = {
-            cholesky_QR,
-            parallel_cholesky_QR,
-            cholesky_QR2_w_gram_schmidt,
-            distributed_cholesky_QR_w_gram_schmidt,
-            modified_cholesky_QR2_w_gram_schmidt};
+        std::vector<std::pair<std::function<std::pair<Matrix, Matrix>(Matrix &)>, std::string>> qr_functions = {
+            // {cholesky_QR, "cholesky_QR"},
+            {parallel_cholesky_QR, "parallel_cholesky_QR"},
+            {cholesky_QR2_w_gram_schmidt, "cholesky_QR2_w_gram_schmidt"},
+            {distributed_cholesky_QR_w_gram_schmidt, "distributed_cholesky_QR_w_gram_schmidt"},
+            {modified_cholesky_QR2_w_gram_schmidt, "modified_cholesky_QR2_w_gram_schmidt"}};
 
-        for (auto &qr_func : qr_functions)
+        for (auto &[qr_func, qr_func_name] : qr_functions)
         {
             for (int i = 0; i < number_of_tests_per_size; ++i)
             {
                 double time = measure_computation_time(qr_func, A);
 
-                csv_file << qr_func.target_type().name() << "," << m << "," << n << "," << time << "\n";
+                csv_file << qr_func_name << "," << m << "," << n << "," << time << "\n";
+
+                std::cout << qr_func_name << " " << m << "x" << n << " " << time << "s\n";
             }
         }
     }
 
-    // Close CSV file
     csv_file.close();
 
     return 0;
