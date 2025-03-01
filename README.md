@@ -30,7 +30,7 @@ What this means for business people who don't care about all that academic stuff
 10. ~~Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)~~
 11. ~~Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRGS, mCQR2GS~~
 12. ~~Fix CQRGS, dCQRGS, mCQR2GS~~
-13. Speed test: CQR2GS, dCQRbGS, mCQR2GS (run the tests)
+13. ~~Speed test: CQR2GS, dCQRbGS, mCQR2GS (run the tests)~~
 14. Speed refactor
 
     a. Goal is to make these significantly faster than CQR while preserving orthogonal stability gains
