@@ -5,7 +5,7 @@
 
 using Matrix = Eigen::MatrixXd;
 
-// Parallel Cholesky QR decomposition
+// Parallel CQR
 std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
