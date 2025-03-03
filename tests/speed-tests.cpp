@@ -20,7 +20,6 @@ int main()
         cholesky_QR(A);
         parallel_cholesky_QR(A);
         cholesky_QR2_w_gram_schmidt(A);
-        distributed_cholesky_QR_w_gram_schmidt(A);
         modified_cholesky_QR2_w_gram_schmidt(A);
     }
 
