@@ -33,22 +33,49 @@ What this means for business people who don't care about all that academic stuff
 13. ~~Speed test: CQR2GS, dCQRbGS, mCQR2GS (run the tests)~~
 14. Speed refactor
 
-    a. Goal is to make these significantly faster than CQR while preserving orthogonal stability gains
+    a. ~~Goal is to make these significantly faster than CQR while preserving orthogonal stability gains~~
 
-    b. Faster than LAPACK, Intel MKL, Eigen, Armadillo
+    b. ~~Flame graph to find overhead~~
 
-    c. Flame graph to find overhead
+    c. ~~Write out algo in ONE function to find computation reductions~~
 
-    d. Write out algo in ONE function to find computation reductions
-
-    e. Code cleanup for speed and RAM optimization (remove unnecessary temp variables, use setting with complex indexing instead of summing/aggs)
+    d. Code speed optimization
     
-    f. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
+        i. Own functions (see flame graph)
+            
+            1. Cholesky QR2 with Gram Schmidt
+
+                a. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
     
-    g. Mathematical manipulations/simplifications
+                b. Mathematical manipulations/simplifications
 
-    h. After editing in helper, insert updated functions back into original file(s).
+            2. Modified Cholesky QR2 with Gram Schmidt
+                
+                a. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
+    
+                b. Mathematical manipulations/simplifications
 
-16. ~~Delete dead code/comments~~
+            3. Parallel CQR
+                
+                a. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
+    
+                b. Mathematical manipulations/simplifications
+
+        ii. Comparison functions
+
+            1. LAPACK
+            
+            2. Intel MKL
+            
+            3. Eigen
+            
+            4. Armadillo
+
+    e. After editing in helper, insert updated functions back into original file(s).
+
+16. Delete dead code/comments
 17. Official speed and accuracy tests (ones where you can make graphs)
 18. Write description
+
+
+I am not optimizing `distributed_cholesky_QR_w_gram_schmidt` because it was meant to run on a CPU/GPU mix, and I am only running on a CPU for this project.
