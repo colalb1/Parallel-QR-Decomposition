@@ -1,24 +1,5 @@
 #include <utils/helper_algos.hpp>
 
-// // Forward declarations of QR decomposition functions
-// std::pair<Matrix, Matrix> cholesky_QR(Matrix &A);
-// std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A);
-
-// std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A);
-// std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A);
-// std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A);
-
-double measure_computation_time(std::function<std::pair<Matrix, Matrix>(Matrix &)> &func, Matrix &A)
-{
-    auto start = std::chrono::high_resolution_clock::now();
-    auto result = func(A);
-    auto end = std::chrono::high_resolution_clock::now();
-
-    // Duration in seconds
-    std::chrono::duration<double> duration = end - start;
-    return duration.count();
-}
-
 int main()
 {
     const std::vector<std::pair<int, int>> matrix_sizes = {
