@@ -20,7 +20,9 @@ std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A);
 // SEE SECTION 2 OF THE PAPER BEFORE OFFICIAL ACCURACY TESTING
 
 // Test function for QR decomposition
-void test_qr_decomposition(const std::function<std::pair<Matrix, Matrix>(Matrix &)> &qr_func, Matrix &A, const std::string &funcName)
+void test_qr_decomposition(const std::function<std::pair<Matrix, Matrix>(Matrix &)> &qr_func,
+                           Matrix &A,
+                           const std::string &funcName)
 {
     auto [Q, R] = qr_func(A);
 
@@ -54,16 +56,16 @@ int main()
     std::vector<QRFuncPair> qr_functions;
 
     // Add each QR decomposition function to the vector
-    qr_functions.push_back({cholesky_QR, "cholesky_QR"});
-    qr_functions.push_back({parallel_cholesky_QR, "parallel_cholesky_QR"});
-    qr_functions.push_back({cholesky_QR_2, "cholesky_QR_2"});
-    qr_functions.push_back({shifted_cholesky_QR, "shifted_cholesky_QR"});
-    qr_functions.push_back({parallel_shifted_cholesky_QR, "parallel_shifted_cholesky_QR"});
-    qr_functions.push_back({shifted_cholesky_QR_3, "shifted_cholesky_QR_3"});
-    qr_functions.push_back({cholesky_QR_w_gram_schmidt, "cholesky_QR_w_gram_schmidt"});
+    // qr_functions.push_back({cholesky_QR, "cholesky_QR"});
+    // qr_functions.push_back({parallel_cholesky_QR, "parallel_cholesky_QR"});
+    // qr_functions.push_back({cholesky_QR_2, "cholesky_QR_2"});
+    // qr_functions.push_back({shifted_cholesky_QR, "shifted_cholesky_QR"});
+    // qr_functions.push_back({parallel_shifted_cholesky_QR, "parallel_shifted_cholesky_QR"});
+    // qr_functions.push_back({shifted_cholesky_QR_3, "shifted_cholesky_QR_3"});
+    // qr_functions.push_back({cholesky_QR_w_gram_schmidt, "cholesky_QR_w_gram_schmidt"});
     qr_functions.push_back({cholesky_QR2_w_gram_schmidt, "cholesky_QR2_w_gram_schmidt"});
-    qr_functions.push_back({distributed_cholesky_QR_w_gram_schmidt, "distributed_cholesky_QR_w_gram_schmidt"});
-    qr_functions.push_back({modified_cholesky_QR2_w_gram_schmidt, "modified_cholesky_QR2_w_gram_schmidt"});
+    // qr_functions.push_back({distributed_cholesky_QR_w_gram_schmidt, "distributed_cholesky_QR_w_gram_schmidt"});
+    // qr_functions.push_back({modified_cholesky_QR2_w_gram_schmidt, "modified_cholesky_QR2_w_gram_schmidt"});
 
     // Test each QR decomposition function
     for (const auto &[qr_func, funcName] : qr_functions)

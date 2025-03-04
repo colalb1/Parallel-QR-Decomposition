@@ -17,10 +17,8 @@ int main()
     {
         Matrix A = Matrix::Random(m, n);
 
-        cholesky_QR(A);
-        parallel_cholesky_QR(A);
-        cholesky_QR2_w_gram_schmidt(A);
-        modified_cholesky_QR2_w_gram_schmidt(A);
+        // Compute QR decomposition
+        auto [Q, R] = cholesky_QR2_w_gram_schmidt(A);
     }
 
     return 0;

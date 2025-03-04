@@ -258,9 +258,10 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
         // Adjusts block size for last iteration
         int const current_block_size = std::min(block_size, n - j);
         Matrix A_j = A.block(0, j, m, current_block_size);
+        Matrix gram_matrix = A_j.transpose() * A_j;
 
         // Cholesky factorization on Gram matrix with no explicit inversion (W_j)
-        Eigen::LLT<Matrix> cholesky_decomposition(A_j.transpose() * A_j);
+        Eigen::LLT<Matrix> cholesky_decomposition(gram_matrix);
         Matrix U = cholesky_decomposition.matrixU();
 
         // Compute orthogonal block Q_j
@@ -298,6 +299,9 @@ std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A)
 
     // Second Q and R extraction
     auto [Q, R_2] = cholesky_QR_w_gram_schmidt(Q_1);
+
+    // Set threads
+    omp_set_num_threads(omp_get_max_threads());
 
     // Calculate final R
     Matrix R = R_2 * R_1;
