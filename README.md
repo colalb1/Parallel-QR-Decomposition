@@ -1,20 +1,86 @@
 # Parallel-QR-Decomposition
 
-## Why I am doing this project:
+BASIC INTRODUCTION GOES HERE
+
+## Precursor
+
+### Why I am doing this project:
 
 I want to learn more about parallelizing programs for high-performance numerical computations on CPUs.
 
-## What this project is:
+### What this project is:
 
 Writing parallel QR decomposition algorithms. Part of this will be implementing the GPU-limited algorithms from [this repo](https://github.com/HybridScale/CholeskyQR2-IM) and continuing to other algorithms (like TLQR or Householder (want stable parallel option)) after I get my bearings.
 
 Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. Now you may continue reading.
 
-## Why you should care:
+### Why you should care:
 
 Algorithms like this significantly speed up least-squares problems and eigenvalue computations for [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis), among other relevant applications. Basically, data scientists will waste less time waiting for models to finish computing and can iterate/improve solutions faster.
 
 What this means for business people who don't care about all that academic stuff is that your engineers can iterate on solutions faster and make you more money.
+
+## Files
+
+## Background
+
+### QR Factorization
+
+### Cholesky Decomposition
+
+### Gram-Schmidt Orthogonalization
+
+### Tall-and-Skinny Matrices
+
+### Ill-Conditioned Matrices
+
+### Condition Numbers
+
+### Floating-Point Arthimetic
+
+### Distributed Memory Architecture
+
+### Weak and Strong Scaling Performance Analysis
+
+### Fine and Course-Grained Parallelization
+
+
+
+## Algorithms
+
+### Cholesky QR (CQR)
+- Performs QR decomposition using Cholesky factorization.
+
+### Parallel Cholesky QR
+- Parallel implementation of the Cholesky QR algorithm.
+
+### Cholesky QR 2 (CQR2)
+- Performs QR decomposition using two iterations of Cholesky QR for improved numerical accuracy.
+
+### Shifted Cholesky QR (sCQR)
+- Performs QR decomposition with a stability shift applied to the diagonal of the Gram matrix.
+
+### Parallel Shifted Cholesky QR
+- Parallel implementation of the Shifted Cholesky QR algorithm.
+
+### Shifted Cholesky QR 3 (sCQR3)
+- Performs QR decomposition using a combination of shifted Cholesky QR and Cholesky QR 2.
+
+### Cholesky QR with Gram-Schmidt (CQRGS)
+- Combines Cholesky QR with Gram-Schmidt orthogonalization for block-wise processing.
+
+### Cholesky QR2 with Gram-Schmidt (CQR2GS)
+- Performs two iterations of Cholesky QR with Gram-Schmidt orthogonalization.
+
+### Distributed Cholesky QR with Gram-Schmidt (dCQRGS)
+- Distributed implementation of Cholesky QR with Gram-Schmidt orthogonalization.
+
+### Modified Cholesky QR2 with Gram-Schmidt (mCQR2GS)
+- Modified version of Cholesky QR2 with Gram-Schmidt, incorporating reorthogonalization and parallel processing.
+
+## Conclusion
+
+Much more important work came up, and I accomplished the minimal acceptable output for this project.
 
 ## TODO:
 
@@ -73,9 +139,8 @@ What this means for business people who don't care about all that academic stuff
 
     e. After editing in helper, insert updated functions back into original file(s).
 
-16. Delete dead code/comments
-17. Official speed and accuracy tests (ones where you can make graphs)
-18. Write description
+16. GENERAL CODE CLEANUP
+17. Write description
 
 
 I am not optimizing `distributed_cholesky_QR_w_gram_schmidt` because it was meant to run on a CPU/GPU mix, and I am only running on a CPU for this project.
