@@ -1,6 +1,7 @@
 #include <utils/helper_algos.hpp>
 
-std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
+// dCQRGS
+constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
 {
     int const m = A.rows();
     int const n = A.cols();
@@ -13,8 +14,8 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
 
     for (int j = 0; j < k; ++j)
     {
-        int const current_block_size = std::min(block_size, n - j * block_size);
         int const current_panel_col = j * block_size;
+        int const current_block_size = std::min(block_size, n - current_panel_col);
 
         // Compute global Gram matrix W_j = \sum_p (A_{p, j}^T A_{p, j})
         Matrix W_j = Matrix::Zero(current_block_size, current_block_size);
@@ -28,7 +29,8 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
             int const start = thread_id * chunk_size;
             int const end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
-            // FIXME: Try to simplify computation by putting directly into W_j. Hard indexing.
+            // Inserting directly into W_j would be more space efficient.
+            // This could cause a race condition or inconsistent state of W_j.
             for (int row = start; row < end; ++row)
             {
                 local_W[thread_id].noalias() += A.block(row, current_panel_col, 1, current_block_size).transpose() *
@@ -77,7 +79,8 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
                 int const start = thread_id * chunk_size;
                 int const end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
-                // FIXME: Try to directly insert into Y. Hard indexing.
+                // Again, would be more space efficient to insert directly into Y.
+                // This could lead to race conditions or inconsistent state of Y.
                 for (int row = start; row < end; ++row)
                 {
                     local_Y[thread_id].noalias() += Q.block(row, current_panel_col, 1, current_block_size).transpose() *

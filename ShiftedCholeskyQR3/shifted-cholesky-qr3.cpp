@@ -1,7 +1,7 @@
 #include <utils/helper_algos.hpp>
 
-// Shifted Cholesky QR decomposition 3
-std::pair<Matrix, Matrix> shifted_cholesky_QR_3(Matrix &A)
+// sCQR3
+constexpr std::pair<Matrix, Matrix> shifted_cholesky_QR_3(Matrix &A)
 {
     // Initial shifted extraction (shift for stability)
     auto [Q_1, R_1] = parallel_shifted_cholesky_QR(A);

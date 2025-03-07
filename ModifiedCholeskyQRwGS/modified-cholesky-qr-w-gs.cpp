@@ -1,10 +1,11 @@
 #include "utils/helper_algos.hpp"
 
-std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
+// mCQR2GS
+constexpr std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
 {
     int const m = A.rows();
     int const n = A.cols();
-    int const block_size = std::min(64, n);          // Adjust block size dynamically
+    int const block_size = std::min(64, n);          // Dynamic block size selection
     int const k = (n + block_size - 1) / block_size; // Number of panels
     int const num_threads = omp_get_max_threads();
 
