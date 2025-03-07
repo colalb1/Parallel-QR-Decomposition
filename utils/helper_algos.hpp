@@ -8,7 +8,7 @@
 // This is a helper file to make implementation of algorithms that rely on
 // simpler algorithms easier to implement.
 
-typedef Eigen::MatrixXd Matrix;
+using Matrix = Eigen::MatrixXd;
 
 // Compute unit roundoff for given floating-point type
 template <typename T>
@@ -25,7 +25,7 @@ T compute_unit_roundoff()
 }
 
 // CQR
-std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
+constexpr std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
 {
     // Compute Gram matrix
     Eigen::LLT<Matrix> cholesky_factorization(A.transpose() * A);
@@ -40,7 +40,7 @@ std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
 }
 
 // Parallel CQR
-std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
+constexpr std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
@@ -104,7 +104,7 @@ std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 }
 
 // CQR2
-std::pair<Matrix, Matrix> cholesky_QR_2(Matrix &A)
+constexpr std::pair<Matrix, Matrix> cholesky_QR_2(Matrix &A)
 {
     // Initial Q and R extraction; this computation will be performed again
     // to increase numerical accuracy.
@@ -153,7 +153,7 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
 }
 
 // Parallel sCQR
-std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
+constexpr std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
@@ -229,7 +229,7 @@ std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
 }
 
 // sCQR3
-std::pair<Matrix, Matrix> shifted_cholesky_QR_3(Matrix &A)
+constexpr std::pair<Matrix, Matrix> shifted_cholesky_QR_3(Matrix &A)
 {
     // Initial shifted extraction (shift for stability)
     auto [Q_1, R_1] = parallel_shifted_cholesky_QR(A);
@@ -244,7 +244,7 @@ std::pair<Matrix, Matrix> shifted_cholesky_QR_3(Matrix &A)
 }
 
 // CQRGS
-std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const to allow in-place modification
+constexpr std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const to allow in-place modification
 {
     int const m = A.rows();
     int const n = A.cols();
@@ -292,7 +292,7 @@ std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A not const t
 }
 
 // CQR2GS
-std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A)
+constexpr std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A)
 {
     // Initial extraction
     auto [Q_1, R_1] = cholesky_QR_w_gram_schmidt(A);
@@ -310,7 +310,7 @@ std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A)
 }
 
 // dCQRGS
-std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
+constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
 {
     int const m = A.rows();
     int const n = A.cols();
@@ -424,7 +424,7 @@ std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
 }
 
 // mCQR2GS
-std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
+constexpr std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
 {
     int const m = A.rows();
     int const n = A.cols();

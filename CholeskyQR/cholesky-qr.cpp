@@ -2,10 +2,10 @@
 #include <Eigen/Dense>
 #include <chrono>
 
-typedef Eigen::MatrixXd Matrix;
+using Matrix = Eigen::MatrixXd;
 
-// Cholesky QR decomposition
-std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
+// CQR
+constexpr std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
 {
     // Compute Gram matrix
     Eigen::LLT<Matrix> cholesky_factorization(A.transpose() * A);

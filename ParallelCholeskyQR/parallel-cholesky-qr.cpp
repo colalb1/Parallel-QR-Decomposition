@@ -6,7 +6,7 @@
 using Matrix = Eigen::MatrixXd;
 
 // Parallel CQR
-std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
+constexpr std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();
