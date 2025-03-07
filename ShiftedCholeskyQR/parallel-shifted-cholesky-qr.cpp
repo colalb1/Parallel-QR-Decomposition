@@ -1,7 +1,7 @@
 #include <utils/helper_algos.hpp>
 
-// Parallel Shifted Cholesky QR decomposition
-std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
+// Parallel sCQR
+constexpr std::pair<Matrix, Matrix> parallel_shifted_cholesky_QR(Matrix &A)
 {
     int num_rows = A.rows();
     int num_cols = A.cols();

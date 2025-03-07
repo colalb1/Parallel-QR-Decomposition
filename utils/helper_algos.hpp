@@ -120,7 +120,7 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR_2(Matrix &A)
 }
 
 // sCQR
-std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
+constexpr std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
 {
     // Number of cols for shift application
     int const num_rows = A.rows();

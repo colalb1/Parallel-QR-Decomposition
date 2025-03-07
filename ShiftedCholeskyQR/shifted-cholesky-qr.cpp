@@ -14,8 +14,8 @@ T compute_unit_roundoff()
     return u;
 }
 
-// Shifted Cholesky QR
-std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
+// sCQR
+constexpr std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
 {
     // Number of cols for shift application
     int const num_rows = A.rows();
