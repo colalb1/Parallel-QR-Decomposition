@@ -1,26 +1,38 @@
 # Parallel-QR-Decomposition
 
-BASIC INTRODUCTION GOES HERE
+Course-grained parallel thin-QR decomposition algorithms for tall-and-skinny matrices on a CPU in C++ using OpenMP.
 
 ## Precursor
 
-### Why I am doing this project:
+### Why I did this project:
 
-I want to learn more about parallelizing programs for high-performance numerical computations on CPUs.
+I wanted to learn more about parallelizing programs for high-performance numerical computations on CPUs. The [authors' Github](https://github.com/HybridScale/CholeskyQR2-IM) that these algorithms are originally based on contains [heterogeneous](https://www.intel.com/content/www/us/en/developer/articles/technical/efficient-heterogenous-parallel-programming-openmp.html) versions that are relatively difficult to understand without first seeing the pseudocode. Thus, this provided an opportunity to mesh my math and HPC interests to learn parallelization in practice, OpenMP, and do a QR decomposition math-refresh while providing some user-friendly(er) code.
+
+The concepts and insights of this project are not novel, but I wanted to implement numerical algorithms from literature as a "warm-up" to a very interesting project that I begin working on very soon (and to show my C++ competence). [This is a hint](https://en.wikipedia.org/wiki/Asian_option) at said project's topic.
 
 ### What this project is:
 
-Writing parallel QR decomposition algorithms. Part of this will be implementing the GPU-limited algorithms from [this repo](https://github.com/HybridScale/CholeskyQR2-IM) and continuing to other algorithms (like TLQR or Householder (want stable parallel option)) after I get my bearings.
+C++ implementation of novel parallel QR decomposition algorithms from [this paper](https://arxiv.org/abs/2405.04237). I will implement the GPU-limited algorithms from [its repository](https://github.com/HybridScale/CholeskyQR2-IM) (**EDIT AFTER IMPLEMENTATION**: the GPU-limited algorithms were *VERY* slow as they were meant for GPUs).
 
-Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. Now you may continue reading.
+Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. You may continue reading now.
 
 ### Why you should care:
 
-Algorithms like this significantly speed up least-squares problems and eigenvalue computations for [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis), among other relevant applications. Basically, data scientists will waste less time waiting for models to finish computing and can iterate/improve solutions faster.
+Parallel algorithms like these significantly speed up least-squares regression and eigenvalue computations for [PCA](https://en.wikipedia.org/wiki/Principal_component_analysis), among [other relevant applications](https://people.duke.edu/~hpgavin/SystemID/References/Tam-QR-history-2010.pdf). Basically, data scientists will waste less time waiting for models to finish training and can iterate/improve solutions faster.
 
-What this means for business people who don't care about all that academic stuff is that your engineers can iterate on solutions faster and make you more money.
+What this means for business people who don't care about any of that high-performance-numerical-computing-math stuff: the computer is faster and your engineers can make you more money.
 
-## Files
+## File Navigation
+
+[exploration](https://github.com/colalb1/Parallel-QR-Decomposition/tree/main/exploration): I tinker with OpenMP to make sure it works on my PC.
+
+[utils](https://github.com/colalb1/Parallel-QR-Decomposition/tree/main/utils): Contains the master helper file with all algorithm implementations (some algorithms are helper functions; this is convenient for testing).
+
+[tests](https://github.com/colalb1/Parallel-QR-Decomposition/tree/main/tests): Speed and orthogonality error tests. The raw `.csv` for the speed tests (in seconds) is in the `/data` path.* 
+
+The remaining folders are named after their algorithm and contain a `.cpp` file with the respective implementation.
+
+*I know it is bad practice to put the `.csv` in a Github repo, but its size is negligible and the raw data provides relevant insights.
 
 ## Background
 
@@ -42,7 +54,7 @@ What this means for business people who don't care about all that academic stuff
 
 ### Weak and Strong Scaling Performance Analysis
 
-### Fine and Course-Grained Parallelization
+### Fine vs Course-Grained Parallelization
 
 
 
