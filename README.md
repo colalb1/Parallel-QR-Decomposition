@@ -36,19 +36,35 @@ The remaining folders are named after their algorithm and contain a `.cpp` file 
 
 ## Background
 
-### QR Factorization
-
-### Cholesky Decomposition
-
-### Gram-Schmidt Orthogonalization
-
 ### Tall-and-Skinny Matrices
 
-### Ill-Conditioned Matrices
+$A\in\mathbb{R}^{m, n}$ is tall and skinny when $m \gg n$. 
+
+The most common occurrence of these is design matrices for machine learning where the number of data points is much larger than the number of features. Other common applications of tall-and-skinny matrices are Fourier transforms in sensors, finite element methods, and the Jacobian matrices for iterative optimization algorithms.
+
+$A$ matrix is "short-and-wide" when $m \ll n$. Short-and-wide problems are analogous to tall-and-skinny problems under the transpose operation.
+
+### Floating-Point Arithmetic
 
 ### Condition Numbers
 
-### Floating-Point Arthimetic
+### Ill-Conditioned Matrices
+
+### QR Decomposition
+
+A matrix decomposition method known primarily for solving linear least squares via back-substitution ($A = QR$ and $Ax=b \implies QRx=b \implies Rx = Q^Tb$ because $Q$ is orthonormal).
+
+$A\in\mathbb{R}^{m, n}\implies Q\in\mathbb{R}^{m, n}$ and $R\in\mathbb{R}^{n, n}$.
+
+$Q$ is [orthonormal](https://en.wikipedia.org/wiki/Orthogonal_matrix) and $R$ is upper-triangular.
+
+A QR decomposition is "thin" when $m > n$. A thin decomposition follows as such: $A = QR = \begin{bmatrix} Q_1 & Q_2\end{bmatrix}\begin{bmatrix}R_1 \\ 0\end{bmatrix} = Q_1R_1$.
+
+QR decomposition is preferred to the [normal equations](https://mathworld.wolfram.com/NormalEquation.html) for solving linear systems since the normal equations square the [condition number](https://en.wikipedia.org/wiki/Condition_number) and may lead to significant rounding errors when $A$ is [singular](https://www.geeksforgeeks.org/singular-matrix/). The condition number of using the normal equations is $\kappa(A)^2$ while its QR decomposition counterpart's is $\mathcal{O}(\kappa(A)\epsilon)$.
+
+There are various other special properties regarding the matrices in QR decomposition and variants of the algorithm that improve the condition number + computation speed. I implore you to [discover them for yourself](https://en.wikipedia.org/wiki/QR_decomposition); this documentation is a very basic crash course.
+
+### Gram-Schmidt Orthogonalization
 
 ### Distributed Memory Architecture
 
