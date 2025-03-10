@@ -68,9 +68,9 @@ There are various other special properties regarding the matrices in QR decompos
 
 ### Distributed Memory Architecture
 
-### Weak and Strong Scaling Performance Analysis
-
 ### Fine vs Course-Grained Parallelization
+
+### Weak and Strong Scaling Performance Analysis
 
 
 
