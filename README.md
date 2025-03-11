@@ -44,11 +44,27 @@ The most common occurrence of these is design matrices for machine learning wher
 
 $A$ matrix is "short-and-wide" when $m \ll n$. Short-and-wide problems are analogous to tall-and-skinny problems under the transpose operation.
 
-### Floating-Point Arithmetic
+### Machine Epsilon or Machine Precision
 
-### Condition Numbers
+Upper bound on approximation error for floating point computations. **Unit roundoff** is a synonym. It is denoted by $\epsilon_{\text{machine}}$.
 
-### Ill-Conditioned Matrices
+Given $b$-based arithmetic and $t$-digit precision, $\epsilon_{\text{machine}} = b^{1 - t}$. Common standards are IEEE 754 single-precision where $b = 2$ and $t = 24$ ($\epsilon_{\text{machine}} \approx 1.1920929\times10^{-7}$) and double-precision where $b = 2$ and $t = 52$ ($\epsilon_{\text{machine}} \approx 2.22044605\times10^{-16}$).
+
+Informally, this is the smallest difference between one floating point number and another. 
+
+### Condition Number
+
+Measures the sensitivity of the solution to pertubations in the input. It is typically denoted by $\kappa$. Condition number with respect to a matrix is denoted by $\kappa(A)$.
+
+Suppose $f: X \to Y$ is an exact function and $\hat{f}$ is an algorithm. $\delta f(x) = f(x) - \hat{f}(x)$ where $x\in X$.
+
+Absolute condition number: $\lim_{\epsilon_{\text{machine}}\to 0^+} \left[\sup_{||\delta x||\leq \epsilon_{\text{machine}}} \Large\frac{||\delta f(x)||}{||\delta x||}\right]$.
+
+Relative condition number: $\lim_{\epsilon_{\text{machine}}\to 0^+} \left[\sup_{||\delta x||\leq \epsilon_{\text{machine}}} \Large\frac{||\delta f(x)|| / ||f(x)||}{||\delta x|| / ||x||}\right]$.
+
+When using the $L^2$ norm, $\kappa(A) = \Large\frac{\sigma_{\text{max}}(A)}{\sigma_{\text{min}}(A)}$ where $\sigma_{\text{max}}$ and $\sigma_{\text{min}}$ are the maximum and minimum [singular values](https://en.wikipedia.org/wiki/Singular_value) of $A$, respectively.
+
+If a condition number is near $1$, it is called **well-conditioned**. If the condition number is very large, it is **ill-conditioned**. Examples of ill-conditioned matrices are [Hilbert](https://en.wikipedia.org/wiki/Hilbert_matrix) matrices, [Vandermonde](https://en.wikipedia.org/wiki/Vandermonde_matrix) matrices with dense nodes, and matrices with nearly-independent rows/columns.
 
 ### QR Decomposition
 
@@ -65,6 +81,29 @@ QR decomposition is preferred to the [normal equations](https://mathworld.wolfra
 There are various other special properties regarding the matrices in QR decomposition and variants of the algorithm that improve the condition number + computation speed. I implore you to [discover them for yourself](https://en.wikipedia.org/wiki/QR_decomposition); this documentation is a very basic crash course.
 
 ### Gram-Schmidt Orthogonalization
+
+The Gram-Schmidt algorithm finds an orthonormal basis for a set of linearly independent vectors.
+
+**Algorithm: Gram-Schmidt Orthogonalization**
+
+**Input:** Linearly independent vectors $\{v_0, \dots, v_n\}$ in an [inner product space](https://en.wikipedia.org/wiki/Inner_product_space).
+
+**Output:** Orthonormal basis $\{e_0, \dots, e_n\}$.
+
+1. **Initialize**:
+   - Set $u_0 = v_0$
+   - Normalize: $e_0 = \frac{u_0}{\|u_0\|}$
+
+2. **For** $i = 1\dots n + 1$:
+   - Set $u_i = v_i$
+   - **For** $j = 0\dots i$:
+     - Compute projection: $\text{proj}_{u_j}(v_i) = \frac{\langle v_i, u_j \rangle}{\langle u_j, u_j \rangle} u_j$
+     - Subtract projection: $u_i = u_i - \text{proj}_{u_j}(v_j)$
+   - Normalize: $e_i = \frac{u_i}{\| u_i \|}$
+
+3. **Return** $\{e_0, \dots, e_n\}$
+
+This orthogonalization method is relevant because $Q = \begin{bmatrix}e_0 \cdots e_n\end{bmatrix}$ (the orthonormal vectors) and $R_{i, j} = \langle v_j, e_i\rangle, \text{  } 0 \leq i \leq j \leq n$ (the projection coefficients). One may deduce that $R_{i, i} = \|u_i\|$.
 
 ### Distributed Memory Architecture
 
