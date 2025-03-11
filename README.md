@@ -36,6 +36,8 @@ The remaining folders are named after their algorithm and contain a `.cpp` file 
 
 ## Background
 
+Skip if you have an undergraduate-level understanding of numerical computing and parallelism.
+
 ### Tall-and-Skinny Matrices
 
 $A\in\mathbb{R}^{m, n}$ is tall and skinny when $m \gg n$. 
