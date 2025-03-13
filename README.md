@@ -107,9 +107,33 @@ The Gram-Schmidt algorithm finds an orthonormal basis for a set of linearly inde
 
 This orthogonalization method is relevant because $Q = \begin{bmatrix}e_0 \cdots e_n\end{bmatrix}$ (the orthonormal vectors) and $R_{i, j} = \langle v_j, e_i\rangle, \text{  } 0 \leq i \leq j \leq n$ (the projection coefficients). One may deduce that $R_{i, i} = \|u_i\|$.
 
-### Distributed Memory Architecture
-
 ### Fine vs Course-Grained Parallelization
+
+I am not a distributed computing expert; this part will remain high-level.
+
+#### Fine-Grained Parallelization
+
+Decomposes a large computation into trivial tasks at an individual (or small block) level.
+
+If I do a matrix computation, task size $T$ for each processor may be $c_{i, j} = \sum_{k} a_{i, k}b_{k, j}$
+
+Communication cost is $\mathbb{O}(Pc)$ where $P$ is the number of processors and $c$ is the cost per communication.
+
+<!-- Fine-grained parallelization in computation refers to the decomposition of a computational task into a large number of small, fine-grained subtasks that can be executed concurrently, often at the level of individual instructions, loop iterations, or small blocks of operations. Mathematically, given a computation represented as a function 
+fine-grained parallelization involves partitioning 
+f
+f into a set of subfunctions  
+ , where  
+  and  
+ , such that the subfunctions  
+​
+  can be executed in parallel with minimal synchronization overhead. The granularity is characterized by the size of  
+​
+  and the computational complexity of  
+​
+ , which are typically small relative to the overall problem size and complexity. Efficient fine-grained parallelization often requires careful consideration of data dependencies, communication costs, and load balancing to maximize parallelism while minimizing overhead. -->
+
+#### Course-Grained Parallelization
 
 ### Weak and Strong Scaling Performance Analysis
 
