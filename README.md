@@ -109,37 +109,51 @@ This orthogonalization method is relevant because $Q = \begin{bmatrix}e_0 \cdots
 
 ### Fine vs Course-Grained Parallelization
 
-I am not a distributed computing expert; this part will remain high-level.
+This will remain relatively high-level for brevity.
 
 #### Fine-Grained Parallelization
 
 Decomposes a large computation into trivial tasks at an individual (or small block) level.
 
-If I do a matrix computation, task size $T$ for each processor may be $c_{i, j} = \sum_{k} a_{i, k}b_{k, j}$
+If I do a matrix multiplication, task size $T$ for each processor may be $c_{i, j} = a_{i, k}b_{k, j}$ (relatively VERY small).
 
-Communication cost is $\mathbb{O}(Pc)$ where $P$ is the number of processors and $c$ is the cost per communication.
+Communication cost $C_{\text{fine}}$ grows at rate $\mathcal{O}(Pc)$ where $P$ is the number of processors and $c$ is the cost per communication. This communication rate is relatively high, meaning it is advantageous to have fast communication in the form of [shared memory architecture](https://en.wikipedia.org/wiki/Shared_memory). 
 
-<!-- Fine-grained parallelization in computation refers to the decomposition of a computational task into a large number of small, fine-grained subtasks that can be executed concurrently, often at the level of individual instructions, loop iterations, or small blocks of operations. Mathematically, given a computation represented as a function 
-fine-grained parallelization involves partitioning 
-f
-f into a set of subfunctions  
- , where  
-  and  
- , such that the subfunctions  
-​
-  can be executed in parallel with minimal synchronization overhead. The granularity is characterized by the size of  
-​
-  and the computational complexity of  
-​
- , which are typically small relative to the overall problem size and complexity. Efficient fine-grained parallelization often requires careful consideration of data dependencies, communication costs, and load balancing to maximize parallelism while minimizing overhead. -->
+Read more about how NVIDIA is taking advantage of shared memory [here](https://developer.nvidia.com/blog/using-shared-memory-cuda-cc/).
+
+The work-to-communication ratio is very small, implying each processor performs few computations.
 
 #### Course-Grained Parallelization
 
-### Weak and Strong Scaling Performance Analysis
+Decomposes a large computation into medium to large-sized tasks.
 
+Following the matrix multiplication example, $|T|$ may be $\vec{a}_i\vec{b_j}$ or $A_{I, K}B_{K, J}$ where $A_{I, K}$ and $B_{K, J}$ are matrix slices.
 
+Communication cost $C_{\text{coarse}}$ is $\mathcal{O}(\sqrt{P}c)$, much lower than that of fine-grained parallelization.
+
+Work-to-communication ratio is relatively large, implying each processor performs MANY computations.
+
+Coarse-grained parallelization is better suited for problems limited by synchronization and communication latency such as in distributed databases where data is partitioned across nodes or in graph algorithms whose workload per edge/vertex [varies greatly](https://en.wikipedia.org/wiki/Bellman%E2%80%93Ford_algorithm).
+
+### Weak and Strong Scaling Speedup
+
+**Strong scaling** measures how execution time decreases as the number of processors $P$ increases. The **strong speedup** is the ratio of time taken to complete a task with one processor $t(1)$ and the same task with $P$ processors, denoted by $t(P)$.
+
+$$\text{\bf{speedup}}_{\text{strong}} = \frac{t(1)}{t(P)}$$
+
+See [Amdahl's law](https://en.wikipedia.org/wiki/Amdahl%27s_law) for more details. Hiring more people to paint a fence speeds it up, but adding too many does not since the work cannot be divided infinitely.
+
+**Weak scaling** measures how execution time changes as $P$ increases while task-size per processor is constant. The **weak speedup** is...
+
+$$\text{\bf{speedup}}_{\text{weak}} = s + p * P$$
+
+where $s$ is the proportion of execution time spent computing serial tasks and $p$ is that of the parallel tasks.
+
+Informally, weak scaling and [Gustafson's law](https://en.wikipedia.org/wiki/Gustafson%27s_law) explain that increasing the problem size and the number of processors results in near-linear speedups. Instead of painting a fence faster, paint a longer fence in the same amount of time by hiring more people.
 
 ## Algorithms
+
+See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not rewritten here for brevity.
 
 ### Cholesky QR (CQR)
 - Performs QR decomposition using Cholesky factorization.
