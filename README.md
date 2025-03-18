@@ -156,7 +156,23 @@ Informally, weak scaling and [Gustafson's law](https://en.wikipedia.org/wiki/Gus
 See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not rewritten here for brevity.
 
 ### Cholesky QR (CQR)
-- Performs QR decomposition using Cholesky factorization.
+
+**Algorithm: Cholesky QR**
+
+**Input:** Matrix $A\in\mathbb{R}^{m, n}$.
+
+**Output:** Matrices $Q\in\mathbb{R}^{m, n}$ and $R\in\mathbb{R}^{n, n}$
+
+1. **Construct Gram Matrix**:
+   - $W = A^TA$
+
+2. **Cholesky Factorization**:
+    - $W = R^TR$
+
+3. **Compute Q**:
+    - $Q = AR^{-1}$
+
+4. **Return** $Q, R$
 
 ### Parallel Cholesky QR
 - Parallel implementation of the Cholesky QR algorithm.
