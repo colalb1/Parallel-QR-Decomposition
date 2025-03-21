@@ -192,14 +192,10 @@ Suppose $p=$ number of processors.
    - $\text{local W}$ as an array of zero matrices $n \times n$, one for each thread  
 
 2. **Compute Gram Matrix in Parallel**  
-   - **Parallel for each** $\text{thread id} \in \left{0, ..., \text{threads} - 1\right}$:  
+   - **Parallel for each** $\text{thread id} \in [0, ..., \text{threads} - 1]$:  
      1. $\text{chunk size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor$  
      2. $\text{start} \gets \text{thread id} \times \text{chunk size}$
-     3. $\text{end} \gets  
-        \begin{cases}  
-        \text{rows}, & \text{if thread id} = \text{threads} - 1 \\  
-        \text{start} + \text{chunk size}, & \text{otherwise}  
-        \end{cases}$ 
+     3. $\text{end} \gets \begin{cases} \text{rows}, & \text{if thread id} = \text{threads} - 1 \\ \text{start} +\text{chunk size}, & \text{otherwise} \end{cases}$ 
      4. $A_i \gets A[\text{start}:\text{end}]$ 
      5. $\text{local W}[\text{thread id}] \gets A_i^T A_i$  
      6. **Critical Section:** $W \gets W + \text{local W}[\text{thread id}]$  
@@ -209,7 +205,7 @@ Suppose $p=$ number of processors.
    - $W = R^T R$
 
 4. **Compute $Q$ in Parallel**  
-   - **Parallel for each** $\text{thread id} \in \{0, ..., \text{threads} - 1\}$:  
+   - **Parallel for each** $\text{thread id} \in [0, ..., \text{threads} - 1]$:  
      1. $Q[\text{start}:\text{end}] \gets Q[\text{start}:\text{end}] \times R^{-1}$  
 
 5. **Return** $(Q, R)$
