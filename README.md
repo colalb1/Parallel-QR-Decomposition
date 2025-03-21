@@ -185,19 +185,19 @@ Suppose $p=$ number of processors.
 **Output:** Matrices $Q \in \mathbb{R}^{m \times n}$ and $R \in \mathbb{R}^{n \times n}$.
 
 1. **Initialize Variables**  
-   - $\text{num\_rows} \gets \text{rows}(A)$  
-   - $\text{num\_cols} \gets \text{cols}(A)$  
-   - $\text{num\_threads} \gets \text{max\_threads()} $  
+   - $\text{rows} \gets \text{rows}(A)$  
+   - $\text{cols} \gets \text{cols}(A)$  
+   - $\text{threads} \gets \text{max\_threads()} $  
    - $W$ as a zero matrix of size $n \times n$  
    - $\text{local\_W}$ as an array of zero matrices $n \times n$, one for each thread  
 
 2. **Compute Gram Matrix in Parallel**  
-   - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{num\_threads} - 1\}$:  
-     1. $ \text{chunk\_size} \gets \big\lfloor\frac{\text{num\_rows}}{\text{num\_threads}}\big\rfloor $  
+   - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{threads} - 1\}$:  
+     1. $ \text{chunk\_size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor $  
      2. $ \text{start} \gets \text{thread\_id} \times \text{chunk\_size} $
      3. $ \text{end} \gets  
         \begin{cases}  
-        \text{num\_rows}, & \text{if thread\_id} = \text{num\_threads} - 1 \\  
+        \text{rows}, & \text{if thread\_id} = \text{threads} - 1 \\  
         \text{start} + \text{chunk\_size}, & \text{otherwise}  
         \end{cases} $ 
      4. $ A_i \gets A[\text{start}:\text{end}] $ 
@@ -209,7 +209,7 @@ Suppose $p=$ number of processors.
    - $W = R^T R$
 
 4. **Compute $Q$ in Parallel**  
-   - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{num\_threads} - 1\}$:  
+   - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{threads} - 1\}$:  
      1. $Q[\text{start}:\text{end}] \gets Q[\text{start}:\text{end}] \times R^{-1}$  
 
 5. **Return** $(Q, R)$
