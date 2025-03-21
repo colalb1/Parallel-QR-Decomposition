@@ -187,29 +187,29 @@ Suppose $p=$ number of processors.
 1. **Initialize Variables**  
    - $\text{rows} \gets \text{rows}(A)$  
    - $\text{cols} \gets \text{cols}(A)$  
-   - $\text{threads} \gets \text{max\_threads()} $  
+   - $\text{threads} \gets \text{max-threads()} $  
    - $W$ as a zero matrix of size $n \times n$  
-   - $\text{local\_W}$ as an array of zero matrices $n \times n$, one for each thread  
+   - $\text{local W}$ as an array of zero matrices $n \times n$, one for each thread  
 
 2. **Compute Gram Matrix in Parallel**  
-   - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{threads} - 1\}$:  
-     1. $ \text{chunk\_size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor $  
-     2. $ \text{start} \gets \text{thread\_id} \times \text{chunk\_size} $
+   - **Parallel for each** $\text{thread id} \in \{0, ..., \text{threads} - 1\}$:  
+     1. $ \text{chunk size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor $  
+     2. $ \text{start} \gets \text{thread id} \times \text{chunk size} $
      3. $ \text{end} \gets  
         \begin{cases}  
-        \text{rows}, & \text{if thread\_id} = \text{threads} - 1 \\  
-        \text{start} + \text{chunk\_size}, & \text{otherwise}  
+        \text{rows}, & \text{if thread id} = \text{threads} - 1 \\  
+        \text{start} + \text{chunk size}, & \text{otherwise}  
         \end{cases} $ 
      4. $ A_i \gets A[\text{start}:\text{end}] $ 
-     5. $\text{local\_W}[\text{thread\_id}] \gets A_i^T A_i$  
-     6. **Critical Section:** $W \gets W + \text{local\_W}[\text{thread\_id}]$  
+     5. $\text{local W}[\text{thread id}] \gets A_i^T A_i$  
+     6. **Critical Section:** $W \gets W + \text{local W}[\text{thread id}]$  
      7. $Q[\text{start}:\text{end}] \gets A_i$  
 
 3. **Perform Cholesky Factorization**  
    - $W = R^T R$
 
 4. **Compute $Q$ in Parallel**  
-   - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{threads} - 1\}$:  
+   - **Parallel for each** $\text{thread id} \in \{0, ..., \text{threads} - 1\}$:  
      1. $Q[\text{start}:\text{end}] \gets Q[\text{start}:\text{end}] \times R^{-1}$  
 
 5. **Return** $(Q, R)$
