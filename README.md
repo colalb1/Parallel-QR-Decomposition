@@ -192,7 +192,7 @@ Suppose $p=$ number of processors.
    - $\text{local W}$ as an array of zero matrices $n \times n$, one for each thread  
 
 2. **Compute Gram Matrix in Parallel**  
-   - **Parallel for each** $\text{thread id} \in \{0, ..., \text{threads} - 1\}$:  
+   - **Parallel for each** $\text{thread id} \in \left{0, ..., \text{threads} - 1\right}$:  
      1. $\text{chunk size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor$  
      2. $\text{start} \gets \text{thread id} \times \text{chunk size}$
      3. $\text{end} \gets  
