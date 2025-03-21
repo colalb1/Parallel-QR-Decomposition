@@ -193,14 +193,14 @@ Suppose $p=$ number of processors.
 
 2. **Compute Gram Matrix in Parallel**  
    - **Parallel for each** $\text{thread id} \in \{0, ..., \text{threads} - 1\}$:  
-     1. $ \text{chunk size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor $  
-     2. $ \text{start} \gets \text{thread id} \times \text{chunk size} $
-     3. $ \text{end} \gets  
+     1. $\text{chunk size} \gets \big\lfloor\frac{\text{rows}}{\text{threads}}\big\rfloor$  
+     2. $\text{start} \gets \text{thread id} \times \text{chunk size}$
+     3. $\text{end} \gets  
         \begin{cases}  
         \text{rows}, & \text{if thread id} = \text{threads} - 1 \\  
         \text{start} + \text{chunk size}, & \text{otherwise}  
-        \end{cases} $ 
-     4. $ A_i \gets A[\text{start}:\text{end}] $ 
+        \end{cases}$ 
+     4. $A_i \gets A[\text{start}:\text{end}]$ 
      5. $\text{local W}[\text{thread id}] \gets A_i^T A_i$  
      6. **Critical Section:** $W \gets W + \text{local W}[\text{thread id}]$  
      7. $Q[\text{start}:\text{end}] \gets A_i$  
