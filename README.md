@@ -153,7 +153,9 @@ Informally, weak scaling and [Gustafson's law](https://en.wikipedia.org/wiki/Gus
 
 ## Algorithms
 
-See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not rewritten here for brevity.
+See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not rewritten here for brevity. 
+
+Suppose $p=$ number of processors.
 
 ### Cholesky QR (CQR)
 
@@ -179,6 +181,7 @@ See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it
 **Algorithm: ParallelCholeskyQR**
 
 **Input:** Matrix $A \in \mathbb{R}^{m \times n}$.
+
 **Output:** Matrices $Q \in \mathbb{R}^{m \times n}$ and $R \in \mathbb{R}^{n \times n}$.
 
 1. **Initialize Variables**  
@@ -187,18 +190,17 @@ See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it
    - $\text{num\_threads} \gets \text{max\_threads()} $  
    - $W$ as a zero matrix of size $n \times n$  
    - $\text{local\_W}$ as an array of zero matrices $n \times n$, one for each thread  
-   - $Q$ as a matrix of size $m \times n$  
 
 2. **Compute Gram Matrix in Parallel**  
    - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{num\_threads} - 1\}$:  
-     1. $ \text{chunk\_size} \gets \frac{\text{num\_rows}}{\text{num\_threads}} $  
+     1. $ \text{chunk\_size} \gets \big\lfloor\frac{\text{num\_rows}}{\text{num\_threads}}\big\rfloor $  
      2. $ \text{start} \gets \text{thread\_id} \times \text{chunk\_size} $
      3. $ \text{end} \gets  
         \begin{cases}  
         \text{num\_rows}, & \text{if thread\_id} = \text{num\_threads} - 1 \\  
         \text{start} + \text{chunk\_size}, & \text{otherwise}  
         \end{cases} $ 
-     4. $ A_i \gets $ slice $ A $ from row $ \text{start} $ to $ \text{end} $  
+     4. $ A_i \gets A[\text{start}:\text{end}] $ 
      5. $\text{local\_W}[\text{thread\_id}] \gets A_i^T A_i$  
      6. **Critical Section:** $W \gets W + \text{local\_W}[\text{thread\_id}]$  
      7. $Q[\text{start}:\text{end}] \gets A_i$  
@@ -206,14 +208,13 @@ See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it
 3. **Perform Cholesky Factorization**  
    - $W = R^T R$
 
-4. **Compute $R^{-1}$**  
-   - $R_{\text{inv}} \gets R^{-1}$  
-
-5. **Compute Final $$ Q $$ in Parallel**  
+4. **Compute $Q$ in Parallel**  
    - **Parallel for each** $\text{thread\_id} \in \{0, ..., \text{num\_threads} - 1\}$:  
-     1. $Q[\text{start}:\text{end}] \gets Q[\text{start}:\text{end}] \times R_{\text{inv}}$  
+     1. $Q[\text{start}:\text{end}] \gets Q[\text{start}:\text{end}] \times R^{-1}$  
 
-6. **Return** $(Q, R)$
+5. **Return** $(Q, R)$
+
+The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing complexity to $\mathcal{O}\big(\frac{mn^2}{p}\big)$ from $\mathcal{O}(mn^2)$. Synchronization overhead from updating $W$ is negligible. Computing the  final $Q$ in parallel scales similarly.
 
 ### Cholesky QR 2 (CQR2)
 - Performs QR decomposition using two iterations of Cholesky QR for improved numerical accuracy.
