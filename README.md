@@ -159,7 +159,7 @@ Suppose $p=$ number of processors.
 
 ### Cholesky QR (CQR)
 
-**Algorithm: Cholesky QR**
+**Algorithm: CholeskyQR**
 
 **Input:** Matrix $A \in \mathbb{R}^{m \times n}$.
 
@@ -213,7 +213,25 @@ Suppose $p=$ number of processors.
 The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing complexity to $\mathcal{O}\big(\frac{mn^2}{p}\big)$ from $\mathcal{O}(mn^2)$. Synchronization overhead from updating $W$ is negligible. Computing the  final $Q$ in parallel scales similarly.
 
 ### Cholesky QR 2 (CQR2)
-- Performs QR decomposition using two iterations of Cholesky QR for improved numerical accuracy.
+
+**Algorithm: CQR2**  
+
+**Input:** Matrix $A \in \mathbb{R}^{m \times n}$.
+
+**Output:** Matrices $Q \in \mathbb{R}^{m \times n}$ and $R \in \mathbb{R}^{n \times n}$. 
+
+1. **First QR Decomposition**  
+   - $[Q_1, R_1] \gets \text{ParallelCholeskyQR}(A)$
+
+2. **Second QR Decomposition for Accuracy**  
+   - $[Q, R_2] \gets \text{ParallelCholeskyQR}(Q_1)$
+
+3. **Compute Final $R$**  
+   - $R \gets R_2 R_1$
+
+4. **Return** $(Q, R)$
+
+**CQR** can produce non-orthogonal vectors, becoming unstable as the condition number increases. Repeating orthogonalization improves stability, as detailed [here](https://link.springer.com/article/10.1007/s00211-005-0615-4). Orthogonality error scales as $\mathcal{O}(\kappa(A)^2\bold{u})$.
 
 ### Shifted Cholesky QR (sCQR)
 - Performs QR decomposition with a stability shift applied to the diagonal of the Gram matrix.
