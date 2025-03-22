@@ -153,7 +153,7 @@ Informally, weak scaling and [Gustafson's law](https://en.wikipedia.org/wiki/Gus
 
 ## Algorithms
 
-See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not rewritten here for brevity. 
+See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not ALL rewritten here for brevity. 
 
 Suppose $p=$ number of processors.
 
@@ -234,13 +234,14 @@ The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing com
 **CQR** can produce non-orthogonal vectors, becoming unstable as the condition number increases. Repeating orthogonalization improves stability, as detailed [here](https://link.springer.com/article/10.1007/s00211-005-0615-4). Orthogonality error scales as $\mathcal{O}(\kappa(A)^2\bold{u})$.
 
 ### Shifted Cholesky QR (sCQR)
-- Performs QR decomposition with a stability shift applied to the diagonal of the Gram matrix.
 
-### Parallel Shifted Cholesky QR
-- Parallel implementation of the Shifted Cholesky QR algorithm.
+From here I will ONLY be giving an explanation of the mathematical and computational advantages of each algorithm. See [the paper](https://arxiv.org/html/2405.04237v1) for pseudocode.
+
+A shift $s = \sqrt{m}\bold{u}||A||_F^2$ is applied to the diagonal of the Gram matrix to force it to be positive definite. The rest of the steps follow **CQR**.
 
 ### Shifted Cholesky QR 3 (sCQR3)
-- Performs QR decomposition using a combination of shifted Cholesky QR and Cholesky QR 2.
+
+Applies **sCQR** then **CQR2** to $A$. 
 
 ### Cholesky QR with Gram-Schmidt (CQRGS)
 - Combines Cholesky QR with Gram-Schmidt orthogonalization for block-wise processing.
@@ -258,65 +259,7 @@ The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing com
 
 Much more important work came up, and I accomplished the minimal acceptable output for this project.
 
-## TODO:
-
-1. ~~Figure out how to run C++ programs on PC without breaking~~
-2. ~~Implement simple parallel applications (for loops, other basics)~~
-3. ~~Implement iterative Cholesky (used for speed comparison)~~
-4. ~~Implement parallel Cholesky (used for speed comparison)~~
-5. ~~Implement CholeskyQR2~~
-6. ~~Implement sCQR3~~
-7. ~~Implement CholeskyQR2 with Gram-Schmidt (CQRGS, CQR2GS)~~
-8. ~~Implement Distributed Cholesky QR with blocked GS (dCQRbGS)~~
-9. ~~Implement Modified Cholesky QRwGS~~
-10. ~~Implement mCQR2GS (test THEN potentiall revert indexing, parallelized panels if computation slower)~~
-11. ~~Accuracy test: CholeskyQR2, sCQR, sCQR3, CQRGS, CQR2GS, dCQRGS, mCQR2GS~~
-12. ~~Fix CQRGS, dCQRGS, mCQR2GS~~
-13. ~~Speed test: CQR2GS, dCQRbGS, mCQR2GS (run the tests)~~
-14. Speed refactor
-
-    a. ~~Goal is to make these significantly faster than CQR while preserving orthogonal stability gains~~
-
-    b. ~~Flame graph to find overhead~~
-
-    c. ~~Write out algo in ONE function to find computation reductions~~
-
-    d. Code speed optimization
-    
-        i. Own functions (see flame graph)
-            
-            1. Cholesky QR2 with Gram Schmidt
-
-                a. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
-    
-                b. Mathematical manipulations/simplifications
-
-            2. Modified Cholesky QR2 with Gram Schmidt
-                
-                a. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
-    
-                b. Mathematical manipulations/simplifications
-
-            3. Parallel CQR
-                
-                a. Use `const`, `constexpr`, and proper C++ objects for clarity and speed
-    
-                b. Mathematical manipulations/simplifications
-
-        ii. Comparison functions
-
-            1. LAPACK
-            
-            2. Intel MKL
-            
-            3. Eigen
-            
-            4. Armadillo
-
-    e. After editing in helper, insert updated functions back into original file(s).
-
-16. GENERAL CODE CLEANUP
-17. Write description
-
+- Flame Graph
+- code cleanup
 
 I am not optimizing `distributed_cholesky_QR_w_gram_schmidt` because it was meant to run on a CPU/GPU mix, and I am only running on a CPU for this project.
