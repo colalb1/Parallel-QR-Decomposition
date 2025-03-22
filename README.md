@@ -235,25 +235,25 @@ The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing com
 
 ### Shifted Cholesky QR (sCQR)
 
-From here I will ONLY be giving an explanation of the mathematical and computational advantages of each algorithm. See [the paper](https://arxiv.org/html/2405.04237v1) for pseudocode.
+From here I will ONLY be giving a brief explanation of each algorithm. See [the paper](https://arxiv.org/html/2405.04237v1) for pseudocode.
 
 A shift $s = \sqrt{m}\bold{u}||A||_F^2$ is applied to the diagonal of the Gram matrix to force it to be positive definite. The rest of the steps follow **CQR**.
 
 ### Shifted Cholesky QR 3 (sCQR3)
 
-Applies **sCQR** then **CQR2** to $A$. 
+This is essentially **CQR2** but instead of applying **CQR** twice, it applies **sCQR** as a preconditioner to **CQR2**, which achieves further orthogonalization.
 
 ### Cholesky QR with Gram-Schmidt (CQRGS)
-- Combines Cholesky QR with Gram-Schmidt orthogonalization for block-wise processing.
+
+Similar to **CQR** but with block processing and panel update/reorthogonalization before computing the final $R$.
 
 ### Cholesky QR2 with Gram-Schmidt (CQR2GS)
-- Performs two iterations of Cholesky QR with Gram-Schmidt orthogonalization.
 
-### Distributed Cholesky QR with Gram-Schmidt (dCQRGS)
-- Distributed implementation of Cholesky QR with Gram-Schmidt orthogonalization.
+**CQR2** with **CQRGS** instead of **CQR**, leveraging parallel block processing and Gram-Schmidt reorthogonalization. It improves stability, efficiency, and accuracy while optimizing computational cost.
 
 ### Modified Cholesky QR2 with Gram-Schmidt (mCQR2GS)
-- Modified version of Cholesky QR2 with Gram-Schmidt, incorporating reorthogonalization and parallel processing.
+
+**mCQR2GS** restructures **CQRGS** to reduce the number of panels while maintaining computational and communication efficiency. It adaptively selects the paneling strategy based on matrix conditioning, ensuring stability with fewer operations. Compared to **CQR2GS**, **mCQR2GS** requires fewer floating-point operations by avoiding explicit factor construction and achieves better orthogonality with fewer panels for high-condition-number matrices.
 
 ## Conclusion
 
