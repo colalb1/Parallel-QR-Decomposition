@@ -257,9 +257,15 @@ Similar to **CQR** but with block processing and panel update/reorthogonalizatio
 
 ## Conclusion
 
-Much more important work came up, and I accomplished the minimal acceptable output for this project.
+This project served as a hands-on exploration of parallel QR decomposition using OpenMP, blending high-performance computing with numerical linear algebra. 
 
-- Flame Graph
-- code cleanup
+While the concepts are not novel, implementing them deepened my understanding of parallelization and provided a practical refresh on QR decomposition. 
+The algorithms showcased here accelerate least-squares regression and eigenvalue computations, making large-scale data analysis more efficient. 
+This lays the groundwork for a more advanced project I will begin soon relating to Asian options.
 
-I am not optimizing `distributed_cholesky_QR_w_gram_schmidt` because it was meant to run on a CPU/GPU mix, and I am only running on a CPU for this project.
+## Side Note
+
+I used the [Intel VTune](https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html) flame graph for performance analysis and stack trace inspection.
+
+I burnt out writing the documentation and realized I want to spend more time writing code instead of these words that people won't read. For this reason, I will likely start contributing to some kind of relevant open-source project related to numerical/parallel computing moving forward because writing documentation is time-intensive and (usually) not very exciting.
+I also want to spend more time watching "The Walking Dead" after work. I watched through [season 7](https://en.wikipedia.org/wiki/The_Walking_Dead_season_7) a few years ago but never saw the whole show. I also want to watch the spinoffs. Realistically, I'll start another project while watching it because I want to learn more things, advance my career, and all that other stuff, but I thought I would let you know where I'm at.
