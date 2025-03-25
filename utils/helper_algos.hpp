@@ -257,12 +257,12 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A n
     {
         // Adjusts block size for last iteration
         const int current_block_size = std::min(block_size, n - j);
-        Matrix A_j = A.block(0, j, m, current_block_size);
-        const Matrix gram_matrix = A_j.transpose() * A_j;
+        const Matrix A_j = A.block(0, j, m, current_block_size);
+        Matrix gram_matrix = A_j.transpose() * A_j;
 
         // Cholesky factorization on Gram matrix with no explicit inversion (W_j)
         Eigen::LLT<Matrix> cholesky_decomposition(gram_matrix);
-        const Matrix U = cholesky_decomposition.matrixU();
+        Matrix U = cholesky_decomposition.matrixU();
 
         // Compute orthogonal block Q_j
         const Matrix Q_j = A_j * U.inverse();
@@ -279,7 +279,7 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR_w_gram_schmidt(Matrix &A) // A n
             const int end_block_size = n - start_block_index;
 
             Matrix A_next = A.block(0, start_block_index, m, end_block_size);
-            Matrix Y = Q_j.transpose() * A_next;
+            const Matrix Y = Q_j.transpose() * A_next;
 
             // A and R panel update
             A_next.noalias() -= Q_j * Y;
