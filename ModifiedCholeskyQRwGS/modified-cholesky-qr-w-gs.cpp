@@ -3,11 +3,11 @@
 // mCQR2GS
 constexpr std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
 {
-    int const m = A.rows();
-    int const n = A.cols();
-    int const block_size = std::min(64, n);          // Dynamic block size selection
-    int const k = (n + block_size - 1) / block_size; // Number of panels
-    int const num_threads = omp_get_max_threads();
+    const int m = A.rows();
+    const int n = A.cols();
+    const int block_size = std::min(64, n);          // Dynamic block size selection
+    const int k = (n + block_size - 1) / block_size; // Number of panels
+    const int num_threads = omp_get_max_threads();
 
     Matrix Q = Matrix::Zero(m, n);
     Matrix R = Matrix::Zero(n, n);
@@ -21,14 +21,14 @@ constexpr std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix 
 
     for (int j = 1; j < k; ++j)
     {
-        int const previous_panel_col = (j - 1) * block_size;
-        int const previous_block_size = std::min(block_size, n - previous_panel_col);
+        const int previous_panel_col = (j - 1) * block_size;
+        const int previous_block_size = std::min(block_size, n - previous_panel_col);
 
-        int const current_panel_col = j * block_size;
-        int const trailing_cols = n - current_panel_col;
-        int const current_block_size = std::min(block_size, trailing_cols);
+        const int current_panel_col = j * block_size;
+        const int trailing_cols = n - current_panel_col;
+        const int current_block_size = std::min(block_size, trailing_cols);
 
-        Matrix Q_jm1 = Q.block(0, previous_panel_col, m, previous_block_size);
+        const Matrix Q_jm1 = Q.block(0, previous_panel_col, m, previous_block_size);
 
         // Projections of orthogonal panels
         Matrix Y = Matrix::Zero(previous_block_size, trailing_cols);

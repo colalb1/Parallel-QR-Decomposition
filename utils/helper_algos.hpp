@@ -312,19 +312,19 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR2_w_gram_schmidt(Matrix &A)
 // dCQRGS
 constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matrix &A)
 {
-    int const m = A.rows();
-    int const n = A.cols();
-    int const block_size = std::min(64, n);          // Adjust block size dynamically
-    int const k = (n + block_size - 1) / block_size; // Number of panels
-    int const num_threads = omp_get_max_threads();
+    const int m = A.rows();
+    const int n = A.cols();
+    const int block_size = std::min(64, n);          // Adjust block size dynamically
+    const int k = (n + block_size - 1) / block_size; // Number of panels
+    const int num_threads = omp_get_max_threads();
 
     Matrix Q = Matrix::Zero(m, n);
     Matrix R = Matrix::Zero(n, n);
 
     for (int j = 0; j < k; ++j)
     {
-        int const current_panel_col = j * block_size;
-        int const current_block_size = std::min(block_size, n - current_panel_col);
+        const int current_panel_col = j * block_size;
+        const int current_block_size = std::min(block_size, n - current_panel_col);
 
         // Compute global Gram matrix W_j = \sum_p (A_{p, j}^T A_{p, j})
         Matrix W_j = Matrix::Zero(current_block_size, current_block_size);
@@ -332,11 +332,11 @@ constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matri
 
 #pragma omp parallel
         {
-            int const thread_id = omp_get_thread_num();
-            int const chunk_size = m / num_threads;
+            const int thread_id = omp_get_thread_num();
+            const int chunk_size = m / num_threads;
 
-            int const start = thread_id * chunk_size;
-            int const end = (thread_id == num_threads - 1) ? m : start + chunk_size;
+            const int start = thread_id * chunk_size;
+            const int end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
             // Inserting directly into W_j would be more space efficient.
             // This could cause a race condition or inconsistent state of W_j.
@@ -352,16 +352,16 @@ constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matri
 
         // Cholesky factorization (thread redundant)
         Eigen::LLT<Matrix> cholesky_factorization(W_j);
-        Matrix U = cholesky_factorization.matrixU();
+        const Matrix U = cholesky_factorization.matrixU();
 
 // Compute Q_{p, j} = A_{p, j} * U^{-1}
 #pragma omp parallel
         {
-            int const thread_id = omp_get_thread_num();
-            int const chunk_size = m / num_threads;
+            const int thread_id = omp_get_thread_num();
+            const int chunk_size = m / num_threads;
 
-            int const start = thread_id * chunk_size;
-            int const end = (thread_id == num_threads - 1) ? m : start + chunk_size;
+            const int start = thread_id * chunk_size;
+            const int end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
             for (int row = start; row < end; ++row)
             {
@@ -374,19 +374,19 @@ constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matri
         // Compute Y = \sum_p Q_{p, j}^T A_{p, j+1:k}
         if (j < k - 1)
         {
-            int const next_panel_col = (j + 1) * block_size;
-            int const trailing_cols = n - next_panel_col;
+            const int next_panel_col = (j + 1) * block_size;
+            const int trailing_cols = n - next_panel_col;
 
             Matrix Y = Matrix::Zero(current_block_size, trailing_cols);
             std::vector<Matrix> local_Y(num_threads, Matrix::Zero(current_block_size, trailing_cols));
 
 #pragma omp parallel
             {
-                int const thread_id = omp_get_thread_num();
-                int const chunk_size = m / num_threads;
+                const int thread_id = omp_get_thread_num();
+                const int chunk_size = m / num_threads;
 
-                int const start = thread_id * chunk_size;
-                int const end = (thread_id == num_threads - 1) ? m : start + chunk_size;
+                const int start = thread_id * chunk_size;
+                const int end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
                 // Again, would be more space efficient to insert directly into Y.
                 // This could lead to race conditions or inconsistent state of Y.
@@ -403,11 +403,11 @@ constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matri
 // Update trailing panels
 #pragma omp parallel
             {
-                int const thread_id = omp_get_thread_num();
-                int const chunk_size = m / num_threads;
+                const int thread_id = omp_get_thread_num();
+                const int chunk_size = m / num_threads;
 
-                int const start = thread_id * chunk_size;
-                int const end = (thread_id == num_threads - 1) ? m : start + chunk_size;
+                const int start = thread_id * chunk_size;
+                const int end = (thread_id == num_threads - 1) ? m : start + chunk_size;
 
                 for (int row = start; row < end; ++row)
                 {
@@ -426,11 +426,11 @@ constexpr std::pair<Matrix, Matrix> distributed_cholesky_QR_w_gram_schmidt(Matri
 // mCQR2GS
 constexpr std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix &A)
 {
-    int const m = A.rows();
-    int const n = A.cols();
-    int const block_size = std::min(64, n);          // Dynamic block size selection
-    int const k = (n + block_size - 1) / block_size; // Number of panels
-    int const num_threads = omp_get_max_threads();
+    const int m = A.rows();
+    const int n = A.cols();
+    const int block_size = std::min(64, n);          // Dynamic block size selection
+    const int k = (n + block_size - 1) / block_size; // Number of panels
+    const int num_threads = omp_get_max_threads();
 
     Matrix Q = Matrix::Zero(m, n);
     Matrix R = Matrix::Zero(n, n);
@@ -444,14 +444,14 @@ constexpr std::pair<Matrix, Matrix> modified_cholesky_QR2_w_gram_schmidt(Matrix 
 
     for (int j = 1; j < k; ++j)
     {
-        int const previous_panel_col = (j - 1) * block_size;
-        int const previous_block_size = std::min(block_size, n - previous_panel_col);
+        const int previous_panel_col = (j - 1) * block_size;
+        const int previous_block_size = std::min(block_size, n - previous_panel_col);
 
-        int const current_panel_col = j * block_size;
-        int const trailing_cols = n - current_panel_col;
-        int const current_block_size = std::min(block_size, trailing_cols);
+        const int current_panel_col = j * block_size;
+        const int trailing_cols = n - current_panel_col;
+        const int current_block_size = std::min(block_size, trailing_cols);
 
-        Matrix Q_jm1 = Q.block(0, previous_panel_col, m, previous_block_size);
+        const Matrix Q_jm1 = Q.block(0, previous_panel_col, m, previous_block_size);
 
         // Projections of orthogonal panels
         Matrix Y = Matrix::Zero(previous_block_size, trailing_cols);
