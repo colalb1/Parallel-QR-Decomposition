@@ -22,7 +22,7 @@ constexpr std::pair<Matrix, Matrix> shifted_cholesky_QR(Matrix &A)
     G.diagonal().array() += s; // Shift diagonal
 
     // Perform Cholesky factorization
-    Matrix cholesky_factorization(G);
+    Eigen::LLT<Matrix> cholesky_factorization(G);
 
     // Get upper triangular Cholesky factor R
     const Matrix R = cholesky_factorization.matrixU();

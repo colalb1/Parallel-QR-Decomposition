@@ -47,7 +47,7 @@ constexpr std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
     }
 
     // Cholesky factorization of Gram matrix
-    Matrix cholesky_factorization(W);
+    Eigen::LLT<Matrix> cholesky_factorization(W);
     const Matrix R = cholesky_factorization.matrixU();
 
     // Compute R inverse
