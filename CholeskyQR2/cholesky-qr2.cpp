@@ -11,7 +11,7 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR_2(Matrix &A)
     auto [Q, R_2] = parallel_cholesky_QR(Q_1);
 
     // Calculate final R
-    Matrix R = R_2 * R_1;
+    const Matrix R = R_2 * R_1;
 
     return {Q, R};
 }

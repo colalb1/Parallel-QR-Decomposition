@@ -42,9 +42,9 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR(Matrix &A)
 // Parallel CQR
 constexpr std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 {
-    int num_rows = A.rows();
-    int num_cols = A.cols();
-    int num_threads = omp_get_max_threads();
+    const int num_rows = A.rows();
+    const int num_cols = A.cols();
+    const int num_threads = omp_get_max_threads();
 
     // Gram matrix
     Matrix W = Matrix::Zero(num_cols, num_cols);
@@ -57,14 +57,14 @@ constexpr std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
 
 #pragma omp parallel
     {
-        int thread_id = omp_get_thread_num();
-        int chunk_size = num_rows / num_threads;
+        const int thread_id = omp_get_thread_num();
+        const int chunk_size = num_rows / num_threads;
 
-        int start = thread_id * chunk_size;
-        int end = (thread_id == num_threads - 1) ? num_rows : start + chunk_size;
+        const int start = thread_id * chunk_size;
+        const int end = (thread_id == num_threads - 1) ? num_rows : start + chunk_size;
 
         // Slice A into a submatrix for this thread
-        Eigen::MatrixXd A_i = A.middleRows(start, end - start);
+        const Matrix A_i = A.middleRows(start, end - start);
 
         // Compute A_i^T * A_i for the sliced submatrix
         local_W[thread_id].noalias() += A_i.transpose() * A_i;
@@ -81,20 +81,20 @@ constexpr std::pair<Matrix, Matrix> parallel_cholesky_QR(Matrix &A)
     }
 
     // Cholesky factorization of Gram matrix
-    Eigen::LLT<Matrix> cholesky_factorization(W);
-    Matrix R = cholesky_factorization.matrixU();
+    Matrix cholesky_factorization(W);
+    const Matrix R = cholesky_factorization.matrixU();
 
     // Compute R inverse
-    Matrix R_inv = R.inverse();
+    const Matrix R_inv = R.inverse();
 
     // Compute Q in parallel using pre-sliced A
 #pragma omp parallel
     {
-        int thread_id = omp_get_thread_num();
-        int chunk_size = num_rows / num_threads;
+        const int thread_id = omp_get_thread_num();
+        const int chunk_size = num_rows / num_threads;
 
-        int start = thread_id * chunk_size;
-        int end = (thread_id == num_threads - 1) ? num_rows : start + chunk_size;
+        const int start = thread_id * chunk_size;
+        const int end = (thread_id == num_threads - 1) ? num_rows : start + chunk_size;
 
         // Calculate Q slices
         Q.middleRows(start, end - start) *= R_inv;
@@ -114,7 +114,7 @@ constexpr std::pair<Matrix, Matrix> cholesky_QR_2(Matrix &A)
     auto [Q, R_2] = parallel_cholesky_QR(Q_1);
 
     // Calculate final R
-    Matrix R = R_2 * R_1;
+    const Matrix R = R_2 * R_1;
 
     return {Q, R};
 }
