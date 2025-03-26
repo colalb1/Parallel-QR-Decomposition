@@ -12,7 +12,7 @@ The concepts and insights of this project are not novel, but I wanted to impleme
 
 ### What this project is:
 
-C++ implementation of novel parallel QR decomposition algorithms from [this paper](https://arxiv.org/abs/2405.04237). I will implement the GPU-limited algorithms from [its repository](https://github.com/HybridScale/CholeskyQR2-IM) (**EDIT AFTER IMPLEMENTATION**: the GPU-limited algorithms were *VERY* slow as they were meant for GPUs).
+C++ implementation of novel parallel QR decomposition algorithms from [this paper](https://arxiv.org/abs/2405.04237). I will implement the GPU-limited algorithms from [its repository](https://github.com/HybridScale/CholeskyQR2-IM) (**EDIT AFTER IMPLEMENTATION**: the GPU-limited algorithms were *VERY* slow as they rely on fine-grained parallelization).
 
 Start by reading [this paper](https://arxiv.org/abs/2405.04237) for background. You may continue reading now.
 
@@ -44,7 +44,7 @@ $A\in\mathbb{R}^{m, n}$ is tall and skinny when $m \gg n$.
 
 The most common occurrence of these is design matrices for machine learning where the number of data points is much larger than the number of features. Other common applications of tall-and-skinny matrices are Fourier transforms in sensors, finite element methods, and the Jacobian matrices for iterative optimization algorithms.
 
-$A$ matrix is "short-and-wide" when $m \ll n$. Short-and-wide problems are analogous to tall-and-skinny problems under the transpose operation.
+$A$ matrix is "short-and-wide" when $m \ll n$. Short-and-wide problems are analogous to tall-and-skinny problems under a transpose operation.
 
 ### Machine Epsilon or Machine Precision
 
@@ -64,7 +64,7 @@ Absolute condition number: $\lim_{\epsilon_{\text{machine}}\to 0^+} \left[\sup_{
 
 Relative condition number: $\lim_{\epsilon_{\text{machine}}\to 0^+} \left[\sup_{||\delta x||\leq \epsilon_{\text{machine}}} \Large\frac{||\delta f(x)|| / ||f(x)||}{||\delta x|| / ||x||}\right]$.
 
-When using the $L^2$ norm, $\kappa(A) = \Large\frac{\sigma_{\text{max}}(A)}{\sigma_{\text{min}}(A)}$ where $\sigma_{\text{max}}$ and $\sigma_{\text{min}}$ are the maximum and minimum [singular values](https://en.wikipedia.org/wiki/Singular_value) of $A$, respectively.
+Under the $L^2$ norm, $\kappa(A) = \Large\frac{\sigma_{\text{max}}(A)}{\sigma_{\text{min}}(A)}$ where $\sigma_{\text{max}}$ and $\sigma_{\text{min}}$ are the maximum and minimum [singular values](https://en.wikipedia.org/wiki/Singular_value) of $A$, respectively.
 
 If a condition number is near $1$, it is called **well-conditioned**. If the condition number is very large, it is **ill-conditioned**. Examples of ill-conditioned matrices are [Hilbert](https://en.wikipedia.org/wiki/Hilbert_matrix) matrices, [Vandermonde](https://en.wikipedia.org/wiki/Vandermonde_matrix) matrices with dense nodes, and matrices with nearly-independent rows/columns.
 
@@ -76,11 +76,13 @@ $A\in\mathbb{R}^{m, n}\implies Q\in\mathbb{R}^{m, n}$ and $R\in\mathbb{R}^{n, n}
 
 $Q$ is [orthonormal](https://en.wikipedia.org/wiki/Orthogonal_matrix) and $R$ is upper-triangular.
 
-A QR decomposition is "thin" when $m > n$. A thin decomposition follows as such: $A = QR = \begin{bmatrix} Q_1 & Q_2\end{bmatrix}\begin{bmatrix}R_1 \\ 0\end{bmatrix} = Q_1R_1$.
+A QR decomposition is "thin" when $m > n$. A thin decomposition follows as such: 
 
-QR decomposition is preferred to the [normal equations](https://mathworld.wolfram.com/NormalEquation.html) for solving linear systems since the normal equations square the [condition number](https://en.wikipedia.org/wiki/Condition_number) and may lead to significant rounding errors when $A$ is [singular](https://www.geeksforgeeks.org/singular-matrix/). The condition number of using the normal equations is $\kappa(A)^2$ while its QR decomposition counterpart's is $\mathcal{O}(\kappa(A)\epsilon)$.
+$$A = QR = \begin{bmatrix} Q_1 & Q_2\end{bmatrix}\begin{bmatrix}R_1 \\ 0\end{bmatrix} = Q_1R_1$$
 
-There are various other special properties regarding the matrices in QR decomposition and variants of the algorithm that improve the condition number + computation speed. I implore you to [discover them for yourself](https://en.wikipedia.org/wiki/QR_decomposition); this documentation is a very basic crash course.
+QR decomposition is preferred to the [normal equations](https://mathworld.wolfram.com/NormalEquation.html) when solving linear systems since the normal equations square the [condition number](https://en.wikipedia.org/wiki/Condition_number) and may lead to significant rounding errors when $A$ is [singular](https://www.geeksforgeeks.org/singular-matrix/). The condition number for the normal equations is $\kappa(A)^2$; it is $\mathcal{O}(\kappa(A)\epsilon)$ for QR decomposition.
+
+There are several special properties of matrices in QR decomposition, along with algorithm variants that enhance the condition number and/or speed up computations. I implore you to [discover them for yourself](https://en.wikipedia.org/wiki/QR_decomposition); this documentation is a very basic crash course.
 
 ### Gram-Schmidt Orthogonalization
 
@@ -109,17 +111,15 @@ This orthogonalization method is relevant because $Q = \begin{bmatrix}e_0 \cdots
 
 ### Fine vs Course-Grained Parallelization
 
-This will remain relatively high-level for brevity.
-
 #### Fine-Grained Parallelization
 
 Decomposes a large computation into trivial tasks at an individual (or small block) level.
 
-If I do a matrix multiplication, task size $T$ for each processor may be $c_{i, j} = a_{i, k}b_{k, j}$ (relatively VERY small).
+For a matrix multiplication, task size $T$ for each processor may be $c_{i, j} = a_{i, k}b_{k, j}$ (VERY small).
 
 Communication cost $C_{\text{fine}}$ grows at rate $\mathcal{O}(Pc)$ where $P$ is the number of processors and $c$ is the cost per communication. This communication rate is relatively high, meaning it is advantageous to have fast communication in the form of [shared memory architecture](https://en.wikipedia.org/wiki/Shared_memory). 
 
-Read more about how NVIDIA is taking advantage of shared memory [here](https://developer.nvidia.com/blog/using-shared-memory-cuda-cc/).
+Read more about how NVIDIA takes advantage of shared memory [here](https://developer.nvidia.com/blog/using-shared-memory-cuda-cc/).
 
 The work-to-communication ratio is very small, implying each processor performs few computations.
 
@@ -127,9 +127,9 @@ The work-to-communication ratio is very small, implying each processor performs 
 
 Decomposes a large computation into medium to large-sized tasks.
 
-Following the matrix multiplication example, $|T|$ may be $\vec{a}_i\vec{b_j}$ or $A_{I, K}B_{K, J}$ where $A_{I, K}$ and $B_{K, J}$ are matrix slices.
+Following the matrix multiplication example, $T$ may be of magnitude $\vec{a}_i\vec{b_j}$ or $A_{I, K}B_{K, J}$ where $A_{I, K}$ and $B_{K, J}$ are matrix slices.
 
-Communication cost $C_{\text{coarse}}$ is $\mathcal{O}(\sqrt{P}c)$, much lower than that of fine-grained parallelization.
+Communication cost $C_{\text{coarse}}$ grows at an order of $\mathcal{O}(\sqrt{P}c)$, much lower than that of fine-grained parallelization.
 
 Work-to-communication ratio is relatively large, implying each processor performs MANY computations.
 
@@ -137,17 +137,17 @@ Coarse-grained parallelization is better suited for problems limited by synchron
 
 ### Weak and Strong Scaling Speedup
 
-**Strong scaling** measures how execution time decreases as the number of processors $P$ increases. The **strong speedup** is the ratio of time taken to complete a task with one processor $t(1)$ and the same task with $P$ processors, denoted by $t(P)$.
+**Strong scaling** measures how execution time decreases as the number of processors $P$ increases. **Strong speedup** is the ratio of time taken to complete a task with one processor $t(1)$ and the same task with $P$ processors, denoted by $t(P)$.
 
 $$\text{\bf{speedup}}_{\text{strong}} = \frac{t(1)}{t(P)}$$
 
 See [Amdahl's law](https://en.wikipedia.org/wiki/Amdahl%27s_law) for more details. Hiring more people to paint a fence speeds it up, but adding too many does not since the work cannot be divided infinitely.
 
-**Weak scaling** measures how execution time changes as $P$ increases while task-size per processor is constant. The **weak speedup** is...
+**Weak scaling** measures how execution time changes as $P$ increases while task size per processor remains constant. The **weak speedup** is...
 
 $$\text{\bf{speedup}}_{\text{weak}} = s + p * P$$
 
-where $s$ is the proportion of execution time spent computing serial tasks and $p$ is that of the parallel tasks.
+where $s$ is the proportion of execution time spent computing serial tasks and $p$ is that of the parallel tasks. For simplicity, assume $s + p \leq 1$ and $s + p \approx 1$. I could not find the "approximately less than" TeX symbol.
 
 Informally, weak scaling and [Gustafson's law](https://en.wikipedia.org/wiki/Gustafson%27s_law) explain that increasing the problem size and the number of processors results in near-linear speedups. Instead of painting a fence faster, paint a longer fence in the same amount of time by hiring more people.
 
@@ -155,7 +155,7 @@ Informally, weak scaling and [Gustafson's law](https://en.wikipedia.org/wiki/Gus
 
 See [this link](https://arxiv.org/html/2405.04237v1) for the full pseudocode; it is not ALL rewritten here for brevity. 
 
-Suppose $p=$ number of processors.
+Suppose $p=$ processor count.
 
 ### Cholesky QR (CQR)
 
@@ -231,11 +231,11 @@ The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing com
 
 4. **Return** $(Q, R)$
 
-**CQR** can produce non-orthogonal vectors, becoming unstable as the condition number increases. Repeating orthogonalization improves stability, as detailed [here](https://link.springer.com/article/10.1007/s00211-005-0615-4). Orthogonality error scales as $\mathcal{O}(\kappa(A)^2\bold{u})$.
+**CQR** can produce non-orthogonal vectors, becoming unstable as the condition number increases. Repeating orthogonalization improves stability, as detailed [here](https://link.springer.com/article/10.1007/s00211-005-0615-4). Orthogonality error scales as such: $\mathcal{O}(\kappa(A)^2\bold{u})$.
 
 ### Shifted Cholesky QR (sCQR)
 
-From here I will ONLY be giving a brief explanation of each algorithm. See [the paper](https://arxiv.org/html/2405.04237v1) for pseudocode.
+From here I will ONLY be giving a brief explanation of each algorithm's improvements. See [the paper](https://arxiv.org/html/2405.04237v1) for pseudocode; it is redundant to write here.
 
 A shift $s = \sqrt{m}\bold{u}||A||_F^2$ is applied to the diagonal of the Gram matrix to force it to be positive definite. The rest of the steps follow **CQR**.
 
@@ -260,12 +260,14 @@ Similar to **CQR** but with block processing and panel update/reorthogonalizatio
 This project served as a hands-on exploration of parallel QR decomposition using OpenMP, blending high-performance computing with numerical linear algebra. 
 
 While the concepts are not novel, implementing them deepened my understanding of parallelization and provided a practical refresh on QR decomposition. 
-The algorithms showcased here accelerate least-squares regression and eigenvalue computations, making large-scale data analysis more efficient. 
-This lays the groundwork for a more advanced project I will begin soon relating to Asian options.
+The algorithms showcased here accelerate least-squares regression and eigenvalue computations, making large-scale data analysis more efficient.
 
 ## Side Note
 
 I used the [Intel VTune](https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html) flame graph for performance analysis and stack trace inspection.
 
-I burnt out writing the documentation and realized I want to spend more time writing code instead of these words that people won't read. For this reason, I will likely start contributing to some kind of relevant open-source project related to numerical/parallel computing moving forward because writing documentation is time-intensive and (usually) not very exciting.
-I also want to spend more time watching "The Walking Dead" after work. I watched through [season 7](https://en.wikipedia.org/wiki/The_Walking_Dead_season_7) a few years ago but never saw the whole show. I also want to watch the spinoffs. Realistically, I'll start another project while watching it because I want to learn more things, advance my career, and all that other stuff, but I thought I would let you know where I'm at.
+I burnt out while writing the documentation and realized I want to spend more time writing code instead of words that people (likely) won't read. For this reason, I will start contributing to some kind of relevant open-source project related to numerical/parallel computing moving forward (after the OTHER project ;)), because writing documentation is time-intensive and (usually) not thrilling. Do NOT mistake this for disinterest in the mathematical concepts or in communicating my ideas. Building "the thing" is more fun than explaining "the thing," and these projects are extracurricular for me, so I'm going to lean toward the "fun" aspect. 
+
+I also want to spend more time watching "The Walking Dead" after work. I watched through [season 7](https://en.wikipedia.org/wiki/The_Walking_Dead_season_7) a few years ago but never saw the whole show. I also want to watch the spinoffs. Realistically, I'll start another project while watching it because I want to learn more things and advance my career, but I thought I would let you know where I'm at. 
+
+A colleague (and close friend) (of whose advice I take more often than many others) exclaimed that I'm unsatisfied with some of my work because it is a compulsion to work on it for me, and that I should relax more to "produce excellence when it counts." I don't really consider my work "excellent" (although it is what I strive for), but I will be taking his advice and watching more "Walking Dead" in the near future.
