@@ -231,13 +231,13 @@ The Gram Matrix is computed in parallel by slicing $A$ into chunks, reducing com
 
 4. **Return** $(Q, R)$
 
-**CQR** can produce non-orthogonal vectors, becoming unstable as the condition number increases. Repeating orthogonalization improves stability, as detailed [here](https://link.springer.com/article/10.1007/s00211-005-0615-4). Orthogonality error scales as such: $\mathcal{O}(\kappa(A)^2\bold{u})$.
+**CQR** can produce non-orthogonal vectors, becoming unstable as the condition number increases. Repeating orthogonalization improves stability, as detailed [here](https://link.springer.com/article/10.1007/s00211-005-0615-4). Orthogonality error scales as such: $\mathcal{O}(\kappa(A)^2\textbf{u})$.
 
 ### Shifted Cholesky QR (sCQR)
 
 From here I will ONLY be giving a brief explanation of each algorithm's improvements. See [the paper](https://arxiv.org/html/2405.04237v1) for pseudocode; it is redundant to write here.
 
-A shift $s = \sqrt{m}\bold{u}||A||_F^2$ is applied to the diagonal of the Gram matrix to force it to be positive definite. The rest of the steps follow **CQR**.
+A shift $s = \sqrt{m}\textbf{u}||A||_F^2$ is applied to the diagonal of the Gram matrix to force it to be positive definite. The rest of the steps follow **CQR**.
 
 ### Shifted Cholesky QR 3 (sCQR3)
 
