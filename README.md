@@ -78,7 +78,7 @@ $Q$ is [orthonormal](https://en.wikipedia.org/wiki/Orthogonal_matrix) and $R$ is
 
 A QR decomposition is "thin" when $m > n$. A thin decomposition follows as such: 
 
-$$A = QR = \begin{bmatrix} Q_1 & Q_2\end{bmatrix}\begin{bmatrix}R_1 , 0\end{bmatrix} = Q_1R_1$$
+$$A = QR = \begin{bmatrix} Q_1 & Q_2\end{bmatrix}\begin{bmatrix}R_1 \\ 0\end{bmatrix} = Q_1R_1$$
 
 QR decomposition is preferred to the [normal equations](https://mathworld.wolfram.com/NormalEquation.html) when solving linear systems since the normal equations square the [condition number](https://en.wikipedia.org/wiki/Condition_number) and may lead to significant rounding errors when $A$ is [singular](https://www.geeksforgeeks.org/singular-matrix/). The condition number for the normal equations is $\kappa(A)^2$; it is $\mathcal{O}(\kappa(A)\epsilon)$ for QR decomposition.
 
