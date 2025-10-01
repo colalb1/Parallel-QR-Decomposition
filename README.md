@@ -265,9 +265,3 @@ The algorithms showcased here accelerate least-squares regression and eigenvalue
 ## Side Note
 
 I used the [Intel VTune](https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html) flame graph for performance analysis and stack trace inspection.
-
-I burnt out while writing the documentation and realized I want to spend more time writing code instead of words that people (likely) won't read. For this reason, I will start contributing to some kind of relevant open-source project related to numerical/parallel computing moving forward (after the OTHER project ;)), because writing documentation is time-intensive and (usually) not thrilling. Do NOT mistake this for disinterest in the mathematical concepts or in communicating my ideas. Building "the thing" is more fun than explaining "the thing," and these projects are extracurricular for me, so I'm going to lean toward the "fun" aspect. 
-
-I also want to spend more time watching "The Walking Dead" after work. I watched through [season 7](https://en.wikipedia.org/wiki/The_Walking_Dead_season_7) a few years ago but never saw the whole show. I also want to watch the spinoffs. Realistically, I'll start another project while watching it because I want to learn more things and advance my career, but I thought I would let you know where I'm at. 
-
-A colleague (and close friend) (of whose advice I take more often than many others) exclaimed that I'm unsatisfied with some of my work because it is a compulsion to work on it for me, and that I should relax more to "produce excellence when it counts." I don't really consider my work "excellent" (although it is what I strive for), but I will be taking his advice and watching more "Walking Dead" in the near future.
